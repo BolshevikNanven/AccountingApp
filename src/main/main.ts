@@ -25,10 +25,26 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
+ipcMain.on('windowButton', async (event, arg) => {
+  switch (arg) {
+    case 'mini': {
+      mainWindow?.minimize();
+      break;
+    }
+    case 'scale': {
+      if (mainWindow?.isMaximized()) {
+        mainWindow?.unmaximize();
+      } else {
+        mainWindow?.maximize();
+      }
+      break;
+    }
+    case 'close': {
+      mainWindow?.close();
+      break;
+    }
+  }
+  
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -55,8 +71,9 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
+    width: 1148,
     height: 728,
+    frame: false,
     icon: getAssetPath('icon.png'),
     webPreferences: {
       preload: app.isPackaged
