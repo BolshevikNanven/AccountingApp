@@ -1,5 +1,5 @@
 import { Minus, Maximize, X } from "lucide-react"
-import WindowDragArea from "./WindowDragArea";
+import WindowDragArea from "./windowDragArea";
 import  "./dragArea.css"
 
 export default function WindowButton() {
@@ -9,7 +9,7 @@ export default function WindowButton() {
     }
 
     return (
-        <div className=" fixed top-0 right-0 flex flex-row h-9 w-screen transition-all z-50 ">
+        <div className=" fixed top-0 right-0 flex flex-row h-9 w-screen transition-colors z-50 ">
             <WindowDragArea className=" flex-1 bg-zinc-50 ml-[68px]"/>
             <button onClick={() => handleClick("mini")} className="nodrag w-12 bg-zinc-50 hover:bg-zinc-300 active:bg-zinc-400 flex flex-row items-center justify-center cursor-default">
                 <Minus className="w-[14px] h-[14px]" />

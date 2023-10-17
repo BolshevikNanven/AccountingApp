@@ -1,9 +1,11 @@
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 
-import NavigationSideBar from './components/Navigation/NavigationSideBar';
-import WindowButton from './components/WindowBar/WindowButton';
+import NavigationSideBar from './components/navigation/navigationSideBar';
+import WindowButton from './components/windowBar/windowButton';
 
 import Home from './pages/home/Home';
+import Details from './pages/details/Details';
+import Calendar from './pages/calendar/Calendar';
 
 import './App.css';
 import "tailwindcss/tailwind.css";
@@ -18,6 +20,8 @@ export default function App() {
         <main className=' flex-1 max-h-full'>
           <Routes>
             <Route path='/' element={<Home />} />
+            <Route path='/details' element={<Details />} />
+            <Route path='/calendar' element={<Calendar />} />
           </Routes>
         </main>
       </div>

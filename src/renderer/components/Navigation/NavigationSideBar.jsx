@@ -1,8 +1,8 @@
-import { ScrollArea } from ".././ui/scrollarea"
-import { Separator } from ".././ui/separator"
-import { Button } from ".././ui/button"
+import { ScrollArea } from "../ui/scrollarea"
+import { Separator } from "../ui/separator"
+import { Button } from "../ui/button"
 
-import NavigationItem from "./NavigationItem"
+import NavigationItem from "./navigationItem"
 
 import {
     HomeRegular, HomeFilled, CalendarRegular, CalendarFilled, ClipboardBulletListLtrRegular, ClipboardBulletListLtrFilled,
