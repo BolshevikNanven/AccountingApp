@@ -1,6 +1,5 @@
 import { Minus, Maximize, X } from "lucide-react"
 import WindowDragArea from "./windowDragArea";
-import  "./dragArea.css"
 
 export default function WindowButton() {
 

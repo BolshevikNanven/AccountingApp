@@ -4,7 +4,7 @@ import { ScrollArea } from "../../components/ui/scrollarea"
 
 export default function Calendar() {
     return (
-        <ScrollArea className="flex flex-col max-h-full px-4 overflow-x-hidden">
+        <ScrollArea className="flex-1 flex flex-col max-h-full px-4 overflow-x-hidden">
             <MainHeader title="流水日历" />
 
 

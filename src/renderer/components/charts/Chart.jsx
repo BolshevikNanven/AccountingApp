@@ -63,17 +63,19 @@ const option = {
             {
                 name: '邮件营销',
                 type: 'line',
-                symbolSize: 6,
+                symbolSize: 7,
+                symbolColor: '#bc0000',
                 color: '#d50000',
                 lineStyle: {
                     normal: {
+                        width: 3,
                         color: '#d50000',
                     }
                 },
                 areaStyle: {
                     normal: {
                         color: new echarts.graphic.LinearGradient(0, 0, 0, 1.1, [
-                            { offset: 0, color: '#d50000' },
+                            { offset: 0, color: '#ff0909' },
                             { offset: 1, color: '#ffffff' },
                         ])
                     }
@@ -84,7 +86,7 @@ const option = {
     }
 };
 
-export default function Chart({ chartType }) {
+export default function Chart({ chartType, title }) {
 
 
     const chartsRef = useRef();
@@ -108,6 +110,11 @@ export default function Chart({ chartType }) {
 
     return (
         <>
+            <p className=" absolute top-0 left-[28px] font-semibold text-lg text-zinc-600">
+                <span className=" absolute bottom-0 left-0 h-[5px] w-[28px] rounded-full bg-gradient-to-r from-primary to-transparent"></span>
+                {title}
+            </p>
+            
             <div ref={chartsRef} className=" h-full w-full "></div>
         </>
     )

@@ -17,7 +17,7 @@ export default function App() {
       <WindowButton />
       <div className=' bg-gray-50 w-screen h-screen flex flex-row'>
         <NavigationSideBar />
-        <main className=' flex-1 max-h-full'>
+        <main className=' flex-1 max-h-full flex flex-row'>
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/details' element={<Details />} />
