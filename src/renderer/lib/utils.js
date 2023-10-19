@@ -1,6 +1,7 @@
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
+import { accountingType } from "../components/icons/icons";
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs))
@@ -21,4 +22,18 @@ export function debounce(fn, wait) {
     timer = setTimeout(fn, wait);
 
   }
+}
+
+/**
+ * 查找账单大类
+ * @param {string} type 
+ * @returns 
+ */
+export function findFatherType(type) {
+  for (let key of Object.keys(accountingType)) {
+      if (accountingType[key].includes(type)) {
+          return key;
+      }
+  }
+
 }
