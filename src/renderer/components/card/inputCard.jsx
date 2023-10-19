@@ -1,9 +1,21 @@
 import { useRef, useState } from "react"
 import { cn } from "../../lib/utils"
 
-import { CalendarDays, ChevronDown } from "lucide-react";
+import dayjs from "dayjs";
+
+import { CalendarDays, ChevronDown,ChevronsUpDown } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
+
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "../ui/popover"
+
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+
+
 
 import Icons from "../icons/icons";
 
@@ -11,6 +23,8 @@ export default function InputCard({ className, vertical = false }) {
 
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [date, setDate] = useState(new Date())
+    const [time, setTime] = useState(dayjs().format('HH:mm'));
 
     const handleInput = (e) => {
 
@@ -47,36 +61,51 @@ export default function InputCard({ className, vertical = false }) {
                     <div className=" flex flex-col text-zinc-600 mb-2">
                         <span className="text-zin-600 font-semibold text-sm pl-[2px] mb-[3px]">时间</span>
                         <div className="flex flex-row">
-                            <button className="bg-zinc-100 flex flex-row items-center gap-1 hover:bg-zinc-200 rounded-md rounded-r-none p-2 px-3 text-sm">
-                                10月19日
-                                <CalendarDays className=" w-4 h-4 text-zinc-600 inline-block" />
-                            </button>
+                            <Popover>
+                                <PopoverTrigger
+                                    className="bg-zinc-100 flex flex-row items-center gap-1 hover:bg-zinc-200 rounded-md rounded-r-none p-2 px-3 text-sm">
+                                    10月19日<CalendarDays className=" w-4 h-4 text-zinc-600" />
+                                </PopoverTrigger>
+                                <PopoverContent className="p-0">
+                                    日历
+                                </PopoverContent>
+                            </Popover>
+
                             <Separator orientation="vertical" />
-                            <button className="bg-zinc-100 hover:bg-zinc-200 rounded-md rounded-l-none p-2 text-sm">17:02</button>
+                            <Popover>
+                                <PopoverTrigger
+                                    className="bg-zinc-100 flex flex-row items-center gap-1 hover:bg-zinc-200 rounded-md rounded-l-none p-2 text-sm">
+                                    {time}<ChevronsUpDown className=" w-4 h-4 text-zinc-600" />
+                                </PopoverTrigger>
+                                <PopoverContent className="p-0">
+                                    timepicker
+                                </PopoverContent>
+                            </Popover>
                         </div>
                     </div>
                     <div className=" flex flex-col text-zinc-600 mb-2">
                         <span className="text-zin-600 font-semibold text-sm pl-[2px] mb-[3px]">账本</span>
                         <div>
-                            <button className="bg-zinc-100 hover:bg-zinc-200 rounded-md p-2 px-3 text-sm">
-                                默认账本
-                                <ChevronDown className=" w-4 h-4 text-zinc-600 inline-block ml-1" />
-                            </button>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className="bg-zinc-100 hover:bg-zinc-200 rounded-md p-2 px-3 text-sm">
+                                    默认账本
+                                    <ChevronDown className=" w-4 h-4 text-zinc-600 inline-block ml-1" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuItem>默认账本</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
                         </div>
                     </div>
                     <div className=" flex flex-col text-zinc-600 mb-3">
                         <span className="text-zin-600 font-semibold text-sm pl-[2px] mb-[3px]">备注</span>
-                        <input type="text" className="w-full bg-zinc-100 p-2 rounded-md outline-none text-sm px-3" placeholder="备注" />
+                        <input type="text" className="w-full bg-zinc-100 p-2 rounded-md outline-none text-sm px-3" placeholder="添加账单备注" />
                     </div>
                     <Separator />
                 </main>
             }
             {vertical &&
-                <div className="flex flex-row">
-                    <Button className="rounded-r-none flex-1">确认支出</Button>
-                    <Separator className=" bg-primary/80" orientation="vertical" />
-                    <Button className="rounded-l-none px-2"> <ChevronDown /> </Button>
-                </div>
+                <Button className="flex-1 py-[10px] active:bg-primary/75">确认记账</Button>
             }
         </div>
     )

@@ -120,7 +120,6 @@ export default function Chart({ chartType, title, className }) {
     const chartsRef = useRef();
 
     const resizeCharts = useCallback((charts) => {
-        console.log(12312);
         charts.resize();
     }, [])
 
@@ -143,7 +142,6 @@ export default function Chart({ chartType, title, className }) {
                 <span className=" absolute bottom-0 left-0 h-[5px] w-[28px] rounded-full bg-gradient-to-r from-primary to-transparent"></span>
                 {title}
             </p>
-
             <div ref={chartsRef} className=" h-full w-full "></div>
         </>
     )
