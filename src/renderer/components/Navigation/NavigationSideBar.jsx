@@ -6,7 +6,7 @@ import NavigationItem from "./navigationItem"
 
 import {
     HomeRegular, HomeFilled, CalendarRegular, CalendarFilled, ClipboardBulletListLtrRegular, ClipboardBulletListLtrFilled,
-    StackRegular,StackFilled
+    StackRegular, StackFilled, SettingsRegular,SettingsFilled
 } from "@fluentui/react-icons"
 
 import { WeatherSunnyRegular, WeatherMoonRegular } from "@fluentui/react-icons"
@@ -18,7 +18,7 @@ export default function NavigationSideBar() {
             <ScrollArea className="flex-1">
                 <div className="flex flex-1 flex-col w-full p-2 gap-2">
                     <NavigationItem icon={<HomeRegular />} activeIcon={<HomeFilled />} label={"主页"} routeTo={'/'} exact />
-                    <NavigationItem icon={<ClipboardBulletListLtrRegular />} activeIcon={<ClipboardBulletListLtrFilled />} label={"流水明细"} routeTo={'/details'}  />
+                    <NavigationItem icon={<ClipboardBulletListLtrRegular />} activeIcon={<ClipboardBulletListLtrFilled />} label={"流水明细"} routeTo={'/details'} />
                     <NavigationItem icon={<CalendarRegular />} activeIcon={<CalendarFilled />} label={"流水日历"} routeTo={'/calendar'} />
                     <NavigationItem icon={<StackRegular />} activeIcon={<StackFilled />} label={"资产"} routeTo={'/account'} />
                 </div>
@@ -26,6 +26,7 @@ export default function NavigationSideBar() {
             <div className="flex flex-col w-full p-2 gap-2">
                 <Separator className=" bg-gray-300 w-[36px] mx-auto" />
                 <ModeToggle />
+                <NavigationItem icon={<SettingsRegular />} activeIcon={<SettingsFilled />} label={"设置"} routeTo={'/settings'} />
             </div>
         </div>
     )

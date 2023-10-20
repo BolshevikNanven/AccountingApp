@@ -1,9 +1,9 @@
-import { useRef, useState } from "react"
+import { forwardRef, useEffect, useRef, useState } from "react"
 import { cn } from "../../lib/utils"
 
 import dayjs from "dayjs";
 
-import { CalendarDays, ChevronDown,ChevronsUpDown } from "lucide-react";
+import { CalendarDays, ChevronDown, ChevronsUpDown } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 
@@ -18,13 +18,30 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 
 import Icons from "../icons/icons";
+import { ScrollArea } from "../ui/scrollarea";
 
-export default function InputCard({ className, vertical = false }) {
+const InputCard = ({ className, full }) => {
 
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [date, setDate] = useState(new Date())
     const [time, setTime] = useState(dayjs().format('HH:mm'));
+
+    const inputRef = useRef();
+
+    /** not finished*/
+    useEffect(() => {
+        const focusInput = (e) => {
+            if ((e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode === 189) && inputRef.current.value === '') {
+                inputRef.current.focus();
+            }
+        }
+
+        window.addEventListener('keydown', focusInput);
+
+        return () => window.removeEventListener('keydown', focusInput);
+
+    }, [])
 
     const handleInput = (e) => {
 
@@ -38,26 +55,23 @@ export default function InputCard({ className, vertical = false }) {
     }
 
     return (
-        <div className={cn(" flex flex-col transition-all relative", className)}>
-            <div className=" absolute top-[-14px] left-0 w-full h-1">
-                <span onClick={handleFold} className=" bg-clip-padding block cursor-pointer w-[86px] border-2 border-transparent mx-auto h-2 rounded-full bg-zinc-300" />
-            </div>
-            {vertical ?
-                <div className=" h-[46px] flex flex-row items-center bg-zinc-100 transition-all focus-within:border-zinc-300 border rounded-lg mb-3">
-                    <Button className="m-0 py-0 h-full px-1 pr-3" variant="ghost">
-                        <Icons name="正餐" />
-                        <p className=" text-md">正餐</p>
-                    </Button>
-                    <Separator className="h-[28px]" orientation="vertical" />
-                    <input type="number" value={inputValue} onChange={handleInput} className="bg-transparent outline-none p-3 h-full flex-1" placeholder="计入账单..." />
-                </div>
-                :
-                <div className=" flex flex-row">
-
+        <div className={cn(" flex flex-col transition-all relative overflow-hidden pt-4", className)}>
+            {!full &&
+                <div className=" absolute top-1 left-0 w-full h-1">
+                    <span onClick={handleFold} className=" bg-clip-padding block cursor-pointer w-[86px] border-2 border-transparent mx-auto h-2 rounded-full bg-zinc-300" />
                 </div>
             }
-            {open &&
-                <main className="flex flex-col mb-3">
+            <div className=" h-[46px] flex flex-row items-center bg-zinc-100 transition-all focus-within:border-zinc-300 border rounded-lg mb-3">
+                <Button className="m-0 py-0 h-full px-1 pr-3" variant="ghost">
+                    <Icons name="正餐" />
+                    <p className=" text-md">正餐</p>
+                </Button>
+                <Separator className="h-[28px]" orientation="vertical" />
+                <input ref={inputRef} type="number" value={inputValue} onChange={handleInput} className="bg-transparent outline-none p-3 h-full flex-1" placeholder="计入账单..." />
+            </div>
+
+            {(open || full) &&
+                <ScrollArea className="flex flex-1 flex-col mb-3">
                     <div className=" flex flex-col text-zinc-600 mb-2">
                         <span className="text-zin-600 font-semibold text-sm pl-[2px] mb-[3px]">时间</span>
                         <div className="flex flex-row">
@@ -99,14 +113,15 @@ export default function InputCard({ className, vertical = false }) {
                     </div>
                     <div className=" flex flex-col text-zinc-600 mb-3">
                         <span className="text-zin-600 font-semibold text-sm pl-[2px] mb-[3px]">备注</span>
-                        <input type="text" className="w-full bg-zinc-100 p-2 rounded-md outline-none text-sm px-3" placeholder="添加账单备注" />
+                        <input type="text" className="w-full bg-zinc-100 p-[10px] rounded-md outline-none text-sm px-3" placeholder="添加账单备注" />
                     </div>
-                    <Separator />
-                </main>
+                    {!full && <Separator />}
+                </ScrollArea>
             }
-            {vertical &&
-                <Button className="flex-1 py-[10px] active:bg-primary/75">确认记账</Button>
-            }
+            {full && <Separator className=" mb-4"/>}
+            <Button className=" py-[10px] active:bg-primary/75">确认记账</Button>
         </div>
     )
 }
+
+export default InputCard;

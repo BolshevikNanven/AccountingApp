@@ -5,7 +5,7 @@ import Chart from "../../components/charts/Chart";
 import DetailsCard from "../../components/card/detailsCard";
 import InOutCard from "../../components/card/inoutCard";
 import InputCard from "../../components/card/inputCard";
-import Tab from "../../components/tab/tab";
+
 
 import { ScrollArea } from "../../components/ui/scrollarea";
 import { TrendingUp, TrendingDown } from "lucide-react";
@@ -19,18 +19,12 @@ export default function Home() {
                 <MainHeader title="主页" className=" px-4" />
 
                 <div className="relative w-full flex-1 pt-2 mt-2">
-                    <div className=" absolute top-0 right-1 z-20">
-                        <Tab value={'支出'} valueOptions={['支出', '收入']} />
-                    </div>
                     <Chart
                         title={'支出分类'}
                         chartType={'pie'}
                     />
                 </div>
                 <div className="relative w-full flex-1 pb-4">
-                    <div className=" absolute top-0 right-2 z-20">
-                        <Tab value={'支出'} valueOptions={['支出', '收入', '收支']} />
-                    </div>
                     <Chart
                         title={'支出趋势'}
                         chartType={'line'}
@@ -70,14 +64,14 @@ export default function Home() {
                             明细
                         </h3>
                         <DetailsCard type='小吃' note='' count={-18.9} className="mb-2" />
-                        <DetailsCard type='正餐' note='吃了答辩' count={+58.8} className="mb-2" />
+                        <DetailsCard type='正餐' note='吃了答辩' count={+581.8} className="mb-2" />
                         <DetailsCard type='正餐' note='吃了勾丝' count={-18.9} className="mb-2" />
                         <DetailsCard type='小吃' note='' count={-18.9} className="mb-2" />
                         <DetailsCard type='正餐' note='吃了答辩' count={-58.8} className="mb-2" />
                         <DetailsCard type='正餐' note='吃了勾丝' count={-18.9} className="mb-2" />
                     </ScrollArea>
-                    <footer className="flex flex-col px-4 py-4 my-1">
-                        <InputCard vertical />
+                    <footer className="flex flex-col px-4 pb-4 my-1 overflow-hidden">
+                        <InputCard />
                     </footer>
                 </div>
             </div>
