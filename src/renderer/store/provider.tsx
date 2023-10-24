@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
 import { createContext, useContext, useReducer } from "react"
 
+import { BillType, billdataReducer } from "./reducer";
+import { BillActions } from "./actions";
 
-const dataContext = createContext(null);
-const settingContext = createContext(null);
 
 
 const testData = [
@@ -39,28 +39,27 @@ const testData = [
     }
 ]
 
-export function useBilldata() {
+const dataContext = createContext<[BillType, ({ type, payload }: BillActions) => void] | [any, any]>([null, null]);
+
+export function useBilldata(): [BillType[], ({ type, payload }: BillActions) => void] {
+
     return [useContext(dataContext)[0], useContext(dataContext)[1]];
 }
 
-export default function DataProvider({ children }) {
-
+export default function DataProvider({ children }: { children: any }) {
 
     const [billdata, dispatchBilldata] = useReducer(billdataReducer, initialBilldata());
 
+
     return (
-        <dataContext.Provider value={[billdata, dispatchBilldata]}>
+        <dataContext.Provider
+            value={[billdata, dispatchBilldata]}
+        >
             {children}
         </dataContext.Provider>
     )
 }
 
-function billdataReducer(billdata, action) {
-    switch (action.type) {
-        case 'ADD':
-
-    }
-}
 function initialBilldata() {
     return testData;
 }

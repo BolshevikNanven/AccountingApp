@@ -1,15 +1,20 @@
+import { useEffect, useState } from "react"
+
 import MainHeader from "../../components/mainHeader/MainHeader"
 import DetailsCard from "../../components/card/detailsCard"
+import DropdownSelector from "../../components/selector/dropdown"
+import InputCard from "../../components/card/inputCard"
 
 import { ScrollArea } from "../../components/ui/scrollarea"
-import InputCard from "../../components/card/inputCard"
 import { Button } from "../../components/ui/button"
 
-import { ListPlus, X, Book, Plus, Filter } from "lucide-react"
-import { cn } from "../../lib/utils"
-import { useEffect, useState } from "react"
-import DropdownSelector from "../../components/selector/dropdown"
 import { useBilldata } from "../../store/provider"
+
+import { ListPlus, X, Book, Plus, Filter } from "lucide-react"
+
+import { cn } from "../../lib/utils"
+
+
 
 export default function Details() {
 
@@ -18,11 +23,35 @@ export default function Details() {
 
     const [selectId, setSelectId] = useState(null);
 
+
     const searchBillById = (id) => {
         if (id === null) {
             return null;
         }
         return billdata.find(bill => bill.id === id);
+    }
+    const submitBill = (action, bill) => {
+        if (action === 'delete') {
+            dispatchBilldata({
+                type: 'DELETE',
+                payload: bill,
+            })
+            setSidebarOpen(false)
+            return;
+        }
+        if (selectId === null) {
+            dispatchBilldata({
+                type: 'ADD',
+                payload: bill,
+            })
+        }
+        if (selectId) {
+            dispatchBilldata({
+                type: 'EDIT',
+                payload: bill,
+            })
+        }
+
     }
     const handleSelectBill = (id) => {
         setSelectId(id);
@@ -41,7 +70,7 @@ export default function Details() {
                     <DropdownSelector icon={<Filter className="w-5 h-5 mr-1 text-zinc-600" />} value={'筛选'} valuesOption={['筛选']} />
                     {!sidebarOpen && <Button variant='outline' className="px-2 pr-3 h-8 mr-2" onClick={handleNewBill}><Plus className="w-5 h-5 text-zinc-600 mr-1 " />新增</Button>}
                 </MainHeader>
-                <ScrollArea className={cn(" pt-2 flex-1 overflow-visible")}>
+                <ScrollArea className={cn(" pt-2 flex-1")}>
                     {billdata.map(bill => <DetailsCard key={bill.id} onClick={() => handleSelectBill(bill.id)} {...bill} className="mb-2 mx-3 pr-3 bg-white transition-shadow hover:shadow" />)}
                 </ScrollArea>
             </div>
@@ -56,7 +85,15 @@ export default function Details() {
                         <span className=" absolute bottom-0 left-0 h-[5px] w-[36px] rounded-full bg-gradient-to-r from-primary to-transparent" />
                     </h3>
                     <div className="flex-1 mx-4 pb-4">
-                        <InputCard data={searchBillById(selectId)} edit={selectId !== null} className="h-full" full transition autofocus />
+                        <InputCard
+                            onSubmit={submitBill}
+                            data={searchBillById(selectId)}
+                            edit={selectId !== null}
+                            className="h-full"
+                            full
+                            transition
+                            autofocus
+                        />
                     </div>
 
                 </div>

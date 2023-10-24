@@ -32,7 +32,7 @@ const emptyData = () => ({
     options: []
 })
 
-const InputCard = ({ data = null, className, full, edit, transition, autofocus }) => {
+const InputCard = ({ data = null, className, full, edit, transition, autofocus, onSubmit = () => { } }) => {
 
     const [open, setOpen] = useState(false);
     const [billdata, setBilldata] = useState(emptyData())
@@ -60,20 +60,7 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus }
         } else setBilldata(data)
 
         //渐入动画
-        if (transition) {
-            boxRef.current.style.transform = 'translateY(5px)';
-            boxRef.current.style.opacity = '0';
-
-            const timer = setTimeout(() => {
-                boxRef.current.style.transform = '';
-                boxRef.current.style.opacity = '1';
-                if (autofocus) {
-                    inputRef.current.focus();
-                }
-
-                clearTimeout(timer);
-            }, 200)
-        }
+        playAnimation();
 
     }, [data])
 
@@ -91,8 +78,42 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus }
     const handleFold = () => {
         setOpen(prev => !prev)
     }
+    const handleSubmit = () => {
+        if (billdata.count === '') {
+            return;
+        }
+        onSubmit('confirm', billdata);
+        setBilldata(emptyData());
+        playAnimation();
+    }
+    const handleDelete = () => {
+        onSubmit('delete', billdata);
+    }
+    const checkOption = (option) => {
+        if (findOptionCheck(option)) {
+            setBilldata({ ...billdata, options: billdata.options.filter(options => options !== option) })
+        } else {
+            setBilldata({ ...billdata, options: [...billdata.options, option] })
+        }
+    }
     const findOptionCheck = (option) => {
         return billdata.options.includes(option);
+    }
+    const playAnimation = () => {
+        if (transition) {
+            boxRef.current.style.transform = 'translateY(5px)';
+            boxRef.current.style.opacity = '0';
+
+            const timer = setTimeout(() => {
+                boxRef.current.style.transform = '';
+                boxRef.current.style.opacity = '1';
+                if (autofocus) {
+                    inputRef.current.focus();
+                }
+
+                clearTimeout(timer);
+            }, 200)
+        }
     }
 
     return (
@@ -160,7 +181,7 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus }
                         <span className="text-zinc-600 font-semibold text-sm pl-[2px] mb-1">更多选项</span>
                         <div className=" flex flex-row flex-wrap gap-1">
                             <div className="flex items-center space-x-1 border rounded-lg px-3 py-2 ">
-                                <Checkbox id='已报销' checked={findOptionCheck('已报销')} />
+                                <Checkbox id='已报销' checked={findOptionCheck('已报销')} onCheckedChange={() => checkOption('已报销')} />
                                 <label htmlFor="已报销" className="cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                                     已报销
                                 </label>
@@ -173,8 +194,8 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus }
             }
             {full && <Separator className=" mb-4" />}
             <div className="flex gap-2">
-                {edit && <Button variant='ghost' className=" w-16 text-red-600 hover:bg-red-100 hover:text-red-700">删除</Button>}
-                <Button className="flex-1 py-[10px] active:bg-primary/75">确认记账</Button>
+                {edit && <Button onClick={handleDelete} variant='ghost' className=" w-16 text-red-600 hover:bg-red-100 hover:text-red-700">删除</Button>}
+                <Button onClick={handleSubmit} className="flex-1 py-[10px] active:bg-primary/75">确认记账</Button>
             </div>
 
         </div>
