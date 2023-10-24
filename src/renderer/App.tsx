@@ -12,6 +12,7 @@ import ThemeProvider from './components/theme/theme';
 
 import './App.css';
 import "tailwindcss/tailwind.css";
+import { Toaster } from './components/ui/toast/toaster';
 
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
                 <Route path='/calendar' element={<Calendar />} />
               </Routes>
             </main>
+            <Toaster />
           </div>
         </Router>
       </ThemeProvider>

@@ -4,7 +4,7 @@ import { cn } from "../../lib/utils"
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 
-import { CalendarDays, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { CalendarDays, Check, CheckCircle2, ChevronDown, ChevronsUpDown } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import Timepicker from "../picker/timepicker";
@@ -20,6 +20,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import Icons from "../icons/icons";
 import { ScrollArea } from "../ui/scrollarea";
 import { Checkbox } from "../ui/checkbox";
+import { useToast } from "../ui/toast/use-toast";
+import TypePicker from "../picker/typepicker";
 
 const emptyData = () => ({
     id: nanoid(),
@@ -36,6 +38,8 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
 
     const [open, setOpen] = useState(false);
     const [billdata, setBilldata] = useState(emptyData())
+
+    const { toast } = useToast();
 
     const inputRef = useRef();
     const boxRef = useRef();
@@ -83,11 +87,31 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
             return;
         }
         onSubmit('confirm', billdata);
-        setBilldata(emptyData());
+        if (data === null) setBilldata(emptyData());
+        toast({
+            variant: 'success',
+            title: (
+                <div className="flex flex-row items-center">
+                    <CheckCircle2 className="w-5 h-5 mr-2" />
+                    保存成功
+                </div>
+            )
+            ,
+        })
         playAnimation();
     }
     const handleDelete = () => {
         onSubmit('delete', billdata);
+        toast({
+            variant: 'success',
+            title: (
+                <div className="flex flex-row items-center">
+                    <CheckCircle2 className="w-5 h-5 mr-2" />
+                    删除成功
+                </div>
+            )
+            ,
+        })
     }
     const checkOption = (option) => {
         if (findOptionCheck(option)) {
@@ -124,10 +148,13 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
                 </div>
             }
             <div className="inputUnderline h-[46px] flex flex-row items-center bg-zinc-100 focus-within:bg-white border rounded-md mb-3">
-                <Button className="m-0 py-0 h-full px-1 pr-3 rounded-none" variant="ghost">
-                    <Icons name={billdata.type} />
-                    <p className=" text-md">{billdata.type}</p>
-                </Button>
+                <TypePicker defaultType={''}>
+                    <Button className="m-0 py-0 h-full px-1 pr-3 rounded-none" variant="ghost">
+                        <Icons name={billdata.type} />
+                        <p className=" text-md">{billdata.type}</p>
+                    </Button>
+                </TypePicker>
+
                 <Separator className="h-[28px]" orientation="vertical" />
                 <input ref={inputRef} type="number" value={billdata.count} onChange={handleInputCount} className="bg-transparent outline-none p-3 h-full flex-1" placeholder="计入账单..." />
             </div>
