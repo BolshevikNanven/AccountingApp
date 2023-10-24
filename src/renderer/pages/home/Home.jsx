@@ -9,9 +9,13 @@ import InputCard from "../../components/card/inputCard";
 
 import { ScrollArea } from "../../components/ui/scrollarea";
 import { TrendingUp, TrendingDown } from "lucide-react";
+import { useBilldata } from "../../store/provider";
 
 
 export default function Home() {
+
+    const [billdata, dispatchBilldata] = useBilldata();
+
 
     return (
         <>
@@ -37,24 +41,24 @@ export default function Home() {
                         本月账单<span className=" absolute bottom-0 left-0 h-[5px] w-[36px] rounded-full bg-gradient-to-r from-primary to-transparent" />
                     </header>
                     <div className="w-full flex flex-col px-4">
-                        <div className=" flex flex-row gap-2 overflow-visible">
+                        <div className=" flex flex-col gap-2 overflow-visible">
                             <InOutCard
                                 title={'支出'}
-                                count={543.2}
-                                className={'bg-[rgb(254,122,135)] shadow-[rgba(254,122,135,0.54)] shadow-md'}
+                                count={'-543.2'}
+                                className={' bg-red-400 '}
                                 icon={<TrendingUp className=" text-white" />}
                             />
                             <InOutCard
                                 title={'收入'}
-                                count={113.42}
-                                className={'bg-[rgb(0,195,179)] shadow-[rgba(0,195,179,0.54)] shadow-md'}
+                                count={'+113.42'}
+                                className={' bg-emerald-400 '}
                                 icon={<TrendingDown className=" text-white" />}
                             />
                         </div>
                         <div className="flex flex-row px-2 my-2 items-center gap-1">
                             <div className="flex flex-col gap-[2px] w-4 h-3">
-                                <span className=" rounded-full flex-1 bg-[rgb(254,122,135)]" />
-                                <span className=" rounded-full flex-1 bg-[rgb(0,195,179)]" />
+                                <span className=" rounded-full flex-1 bg-red-400" />
+                                <span className=" rounded-full flex-1 bg-emerald-400" />
                             </div>
                             <p className=" text-sm text-zinc-700 font-semibold">-429.78</p>
                         </div>
@@ -63,12 +67,14 @@ export default function Home() {
                         <h3 className=" sticky top-0 left-0 text-lg pb-1 font-semibold text-zinc-600 w-full bg-white">
                             明细
                         </h3>
-                        <DetailsCard type='小吃' note='' count={-18.9} className="mb-2" />
-                        <DetailsCard type='正餐' note='吃了答辩' count={+581.8} className="mb-2" />
-                        <DetailsCard type='正餐' note='吃了勾丝' count={-18.9} className="mb-2" />
-                        <DetailsCard type='小吃' note='' count={-18.9} className="mb-2" />
-                        <DetailsCard type='正餐' note='吃了答辩' count={-58.8} className="mb-2" />
-                        <DetailsCard type='正餐' note='吃了勾丝' count={-18.9} className="mb-2" />
+                        {billdata.map(bill =>
+                            <DetailsCard
+                                key={bill.id}
+                                {...bill}
+                                className="mb-2"
+                            />
+                        )}
+
                     </ScrollArea>
                     <footer className="flex flex-col px-4 pb-4 my-1 overflow-hidden">
                         <InputCard />

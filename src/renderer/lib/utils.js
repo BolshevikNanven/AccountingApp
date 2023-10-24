@@ -3,6 +3,11 @@ import { twMerge } from "tailwind-merge"
 
 import { accountingType } from "../components/icons/icons";
 
+/**
+ * 样式合并
+ * @param  {...any} inputs 
+ * @returns 
+ */
 export function cn(...inputs) {
   return twMerge(clsx(inputs))
 }

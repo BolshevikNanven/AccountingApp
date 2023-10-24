@@ -14,6 +14,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        zinc50: "var(--zinc50)",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -70,6 +71,9 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundColor: {
+        "zinc-850":"rgb(31 31 34 /var(--tw-bg-opacity))"
+      }
     },
   },
   plugins: [require("tailwindcss-animate")],

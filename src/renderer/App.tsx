@@ -7,25 +7,34 @@ import Home from './pages/home/Home';
 import Details from './pages/details/Details';
 import Calendar from './pages/calendar/Calendar';
 
+import DataProvider from './store/provider';
+import ThemeProvider from './components/theme/theme';
+
 import './App.css';
 import "tailwindcss/tailwind.css";
 
 
 export default function App() {
   return (
-    <Router>
-      <WindowButton />
-      <div className=' bg-gray-50 w-screen h-screen flex flex-row'>
-        <NavigationSideBar />
-        <main className=' flex-1 max-h-full flex flex-row overflow-x-hidden'>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/details' element={<Details />} />
-            <Route path='/calendar' element={<Calendar />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <DataProvider>
+      <ThemeProvider>
+        <Router>
+          <WindowButton />
+          <div className=' bg-zinc50 w-screen h-screen flex flex-row'>
+            <NavigationSideBar />
+            <main className=' flex-1 max-h-full flex flex-row overflow-x-hidden'>
+              <Routes>
+                <Route path='/' element={<Home />} />
+                <Route path='/details' element={<Details />} />
+                <Route path='/calendar' element={<Calendar />} />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </ThemeProvider>
+
+    </DataProvider>
+
 
 
   );

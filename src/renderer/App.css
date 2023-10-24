@@ -8,6 +8,7 @@
 
 @layer base {
   :root {
+    --zinc50: #fafafa;
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
@@ -29,8 +30,9 @@
     --ring: 221.2 83.2% 53.3%;
     --radius: 0.5rem;
   }
- 
+
   .dark {
+    --zinc50: rgb(31, 31, 34);
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
     --card: 222.2 84% 4.9%;
@@ -54,26 +56,76 @@
 }
 
 
- 
+
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
+@font-face {
+  font-family: 'HarmonyOS';
+  src:url('/assets/HarmonyOS_Sans_SC_Black.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'HarmonyOS';
+  src:url('/assets/HarmonyOS_Sans_SC_Bold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'HarmonyOS';
+  src:url('/assets/HarmonyOS_Sans_SC_Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
-
-html,body{
+html,
+body {
+  font-family: 'HarmonyOS';
   background: transparent;
   overflow: hidden;
 }
-.drag{
+
+.drag {
   -webkit-app-region: drag;
   user-select: none;
 }
-.nodrag{
+
+.nodrag {
   -webkit-app-region: no-drag;
+}
+
+.inputUnderline {
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.inputUnderline:focus-within::before,
+.inputUnderline:active::before {
+  width: 100%;
+  left: 0;
+  opacity: 1;
+}
+
+.inputUnderline::before {
+
+  content: '';
+  opacity: 0;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: #1a73e8;
+  transition: all ease-in-out .14s;
+  z-index: 30;
 }

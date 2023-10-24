@@ -3,45 +3,60 @@ import DetailsCard from "../../components/card/detailsCard"
 
 import { ScrollArea } from "../../components/ui/scrollarea"
 import InputCard from "../../components/card/inputCard"
+import { Button } from "../../components/ui/button"
 
-import { ListPlus, X } from "lucide-react"
+import { ListPlus, X, Book, Plus, Filter } from "lucide-react"
 import { cn } from "../../lib/utils"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import DropdownSelector from "../../components/selector/dropdown"
+import { useBilldata } from "../../store/provider"
 
 export default function Details() {
 
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [billdata, dispatchBilldata] = useBilldata();
+
+    const [selectId, setSelectId] = useState(null);
+
+    const searchBillById = (id) => {
+        if (id === null) {
+            return null;
+        }
+        return billdata.find(bill => bill.id === id);
+    }
+    const handleSelectBill = (id) => {
+        setSelectId(id);
+        setSidebarOpen(true);
+    }
+    const handleNewBill = () => {
+        setSelectId(null);
+        setSidebarOpen(true);
+    }
 
     return (
         <>
             <div className="flex-1 flex flex-col max-h-full overflow-x-hidden select-none">
-                <MainHeader title="流水明细" />
-                <ScrollArea className={cn(" pt-2 px-3 flex-1", !sidebarOpen && "pr-4")}>
-                    <DetailsCard type='小吃' note='' count={-18.9} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='正餐' note='吃了答辩' count={+58.8} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='正餐' note='吃了勾丝' count={-18.9} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='小吃' note='' count={-18.9} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='正餐' note='吃了答辩' count={-58.8} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='正餐' note='吃了勾丝' count={-18.9} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='小吃' note='' count={-18.9} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='正餐' note='吃了答辩' count={+58.8} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='正餐' note='吃了勾丝' count={-18.9} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='小吃' note='' count={-18.9} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='正餐' note='吃了答辩' count={-58.8} className="mb-2 pr-3 bg-white" />
-                    <DetailsCard type='正餐' note='吃了勾丝' count={-18.9} className="mb-2 pr-3 bg-white" />
+                <MainHeader title="流水明细" className=' ml-2'>
+                    <DropdownSelector icon={<Book className="w-5 h-5 mr-1 text-zinc-600" />} value={'默认账本'} valuesOption={['默认账本', '212']} />
+                    <DropdownSelector icon={<Filter className="w-5 h-5 mr-1 text-zinc-600" />} value={'筛选'} valuesOption={['筛选']} />
+                    {!sidebarOpen && <Button variant='outline' className="px-2 pr-3 h-8 mr-2" onClick={handleNewBill}><Plus className="w-5 h-5 text-zinc-600 mr-1 " />新增</Button>}
+                </MainHeader>
+                <ScrollArea className={cn(" pt-2 flex-1 overflow-visible")}>
+                    {billdata.map(bill => <DetailsCard key={bill.id} onClick={() => handleSelectBill(bill.id)} {...bill} className="mb-2 mx-3 pr-3 bg-white transition-shadow hover:shadow" />)}
                 </ScrollArea>
             </div>
-            <div className={cn("h-full w-[356px] p-3 pb-4 pt-[48px] overflow-hidden transition-all duration-300", !sidebarOpen && "w-0 px-0")}>
-                <div className=" min-w-[328px] w-[328px] h-full shadow-xl rounded-lg flex flex-col overflow-hidden">
-                    <header className=" bg-[rgb(241,243,244)] h-[36px] border-t rounded-t-lg border-white flex flex-row justify-between px-4">
-                        <button className="outling-none bg-transparent"><ListPlus className="w-5 h-5 text-zinc-500" /></button>
-                        <button onClick={() => setSidebarOpen(false)} className="outling-none bg-transparent"><X className="w-5 h-5 text-zinc-500" /></button>
+            <div className={cn("h-full w-[356px] p-3 pb-4 pt-[48px] overflow-hidden transition-all duration-200", !sidebarOpen && "w-0 px-0")}>
+                <div className=" min-w-[332px] w-[332px] h-full shadow-xl rounded-lg flex flex-col overflow-hidden">
+                    <header className=" bg-[rgb(241,243,244)] h-[36px] border-t rounded-t-lg border-white flex flex-row items-center justify-between px-4">
+                        <button onClick={handleNewBill} className="outling-none bg-transparent h-[28px] w-[28px] rounded-full hover:bg-zinc-200"><ListPlus className="w-5 h-5 mx-auto text-zinc-500" /></button>
+                        <button onClick={() => setSidebarOpen(false)} className="outling-none bg-transparent h-[28px] w-[28px] rounded-full hover:bg-zinc-200"><X className="w-5 h-5 mx-auto text-zinc-500" /></button>
                     </header>
-                    <h3 className=" relative text-xl font-semibold text-zinc-700 mx-3 pt-3 ml-[14px] ">
-                        新建账单<span className=" absolute bottom-0 left-0 h-[5px] w-[36px] rounded-full bg-gradient-to-r from-primary to-transparent" />
+                    <h3 className=" relative text-xl font-semibold text-zinc-700 mx-3 pt-3 ml-[14px] select-none">
+                        {selectId === null ? '新建账单' : '编辑账单'}
+                        <span className=" absolute bottom-0 left-0 h-[5px] w-[36px] rounded-full bg-gradient-to-r from-primary to-transparent" />
                     </h3>
-                    <div className="flex-1 mx-3 pb-4">
-                        <InputCard className="h-full" full />
+                    <div className="flex-1 mx-4 pb-4">
+                        <InputCard data={searchBillById(selectId)} edit={selectId !== null} className="h-full" full transition autofocus />
                     </div>
 
                 </div>

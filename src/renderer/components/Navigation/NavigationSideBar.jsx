@@ -2,6 +2,8 @@ import { ScrollArea } from "../ui/scrollarea"
 import { Separator } from "../ui/separator"
 import { Button } from "../ui/button"
 
+import { useTheme } from "../theme/theme"
+
 import NavigationItem from "./navigationItem"
 
 import {
@@ -34,8 +36,11 @@ export default function NavigationSideBar() {
 
 export function ModeToggle() {
 
+    const [theme, toggleTheme] = useTheme()
+    
+
     return (
-        <Button variant="ghost" size="icon" className="mx-auto flex justify-center items-center text-3xl font-bold w-[46px] h-[46px] rounded-[8px] transition-all hover:bg-gray-200 active:bg-gray-300 dark:hover:bg-zinc-800 dark:active:bg-zinc-850">
+        <Button onClick={toggleTheme} variant="ghost" size="icon" className="mx-auto flex justify-center items-center text-3xl font-bold w-[46px] h-[46px] rounded-[8px] transition-all hover:bg-gray-200 active:bg-gray-300 dark:hover:bg-zinc-800 dark:active:bg-zinc-850">
             <WeatherSunnyRegular className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <WeatherMoonRegular className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
         </Button>

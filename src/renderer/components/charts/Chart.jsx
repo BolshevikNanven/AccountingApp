@@ -105,7 +105,6 @@ export default function Chart({ chartType, title, className, data }) {
     const [timeState, setTimeState] = useState('月')
     const chartsRef = useRef();
 
-
     const resizeCharts = useCallback((charts) => {
         charts.resize();
     }, [])
@@ -118,8 +117,6 @@ export default function Chart({ chartType, title, className, data }) {
         charts.setOption(option(chartType));
 
         window.addEventListener('resize', debounce(() => resizeCharts(charts), 500))
-
-
     }, [])
 
 
