@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import MainHeader from "../../components/mainHeader/MainHeader"
 import DetailsCard from "../../components/card/detailsCard"
@@ -62,6 +62,15 @@ export default function Details() {
         setSidebarOpen(true);
     }
 
+    const renderBillData = useMemo(() => 
+        billdata.map(bill =>
+            <DetailsCard
+                key={bill.id}
+                onClick={() => handleSelectBill(bill.id)} {...bill}
+                className="mb-2 mx-3 pr-3 bg-white transition-shadow hover:shadow"
+            />
+    ,[billdata]))
+
     return (
         <>
             <div className="flex-1 flex flex-col max-h-full overflow-x-hidden select-none">
@@ -71,7 +80,7 @@ export default function Details() {
                     {!sidebarOpen && <Button variant='outline' className="px-2 pr-3 h-8 mr-2" onClick={handleNewBill}><Plus className="w-5 h-5 text-zinc-600 mr-1 " />新增</Button>}
                 </MainHeader>
                 <ScrollArea className={cn(" pt-2 flex-1")}>
-                    {billdata.map(bill => <DetailsCard key={bill.id} onClick={() => handleSelectBill(bill.id)} {...bill} className="mb-2 mx-3 pr-3 bg-white transition-shadow hover:shadow" />)}
+                   {renderBillData}
                 </ScrollArea>
             </div>
             <div className={cn("h-full w-[356px] p-3 pb-4 pt-[48px] overflow-hidden transition-all", !sidebarOpen && "w-0 px-0")}>

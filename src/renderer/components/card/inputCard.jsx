@@ -4,7 +4,7 @@ import { cn } from "../../lib/utils"
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 
-import { CalendarDays, Check, CheckCircle2, ChevronDown, ChevronsUpDown } from "lucide-react";
+import { CalendarDays, Check, CheckCircle2, ChevronDown, ChevronsUpDown, Minus, Plus, XCircle } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import Timepicker from "../picker/timepicker";
@@ -26,8 +26,9 @@ import TypePicker from "../picker/typepicker";
 const emptyData = () => ({
     id: nanoid(),
     datetime: dayjs().format('YYYY-MM-DD HH:mm'),
+    out: true,
     bigType: null,
-    type: '正餐',
+    type: '餐饮',
     count: '',
     ledger: '默认账本',
     note: '',
@@ -67,7 +68,11 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
         playAnimation();
 
     }, [data])
-
+    const handleInputDown = (e) => {
+        if (e.key === '-' || e.key === '+' || e.key === 'e') {
+            e.preventDefault()
+        }
+    }
     const handleInputCount = (e) => {
         if (!open && e.target.value !== "") setOpen(true);
         if (e.target.value === "" && open) setOpen(false);
@@ -79,11 +84,27 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
     const handleSelectTime = (time) => {
         setBilldata({ ...billdata, datetime: dayjs(billdata.datetime).format('YYYY-MM-DD ') + time })
     }
+    const handleSelectType = (bigType, type) => {
+        setBilldata({ ...billdata, bigType: bigType, type: type })
+    }
+    const handleInout = () => {
+        setBilldata({ ...billdata, out: !billdata.out })
+    }
     const handleFold = () => {
         setOpen(prev => !prev)
     }
     const handleSubmit = () => {
         if (billdata.count === '') {
+            toast({
+                variant: 'destructive',
+                title: (
+                    <div className="flex flex-row items-center">
+                        <XCircle className="w-5 h-5 mr-2" />
+                        金额不能为空！
+                    </div>
+                )
+                ,
+            })
             return;
         }
         onSubmit('confirm', billdata);
@@ -148,15 +169,29 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
                 </div>
             }
             <div className="inputUnderline h-[46px] flex flex-row items-center bg-zinc-100 focus-within:bg-white border rounded-md mb-3">
-                <TypePicker defaultType={''}>
+                <TypePicker icontype={billdata.out ? 'out' : 'in'} onSelectType={handleSelectType}>
                     <Button className="m-0 py-0 h-full px-1 pr-3 rounded-none" variant="ghost">
                         <Icons name={billdata.type} />
-                        <p className=" text-md">{billdata.type}</p>
+                        <p className=" whitespace-nowrap text-md">{billdata.type}</p>
                     </Button>
                 </TypePicker>
 
                 <Separator className="h-[28px]" orientation="vertical" />
-                <input ref={inputRef} type="number" value={billdata.count} onChange={handleInputCount} className="bg-transparent outline-none p-3 h-full flex-1" placeholder="计入账单..." />
+                <button onClick={handleInout} className=" h-full px-1 pr-0">
+                    {billdata.out ? <Minus strokeWidth={3} className=" text-green-600 w-5 h-5" /> : <Plus strokeWidth={2.8} className=" text-red-600 w-5 h-5 " />}
+                </button>
+                <input
+                    ref={inputRef}
+                    type="number"
+                    min={0}
+                    value={billdata.count}
+                    onInput={handleInputCount}
+                    onKeyDown={handleInputDown}
+                    className={cn(" min-w-0 bg-transparent outline-none p-3 pl-0 h-full flex-1 font-semibold text-lg placeholder:font-normal placeholder:text-base",
+                        billdata.out ? "text-green-600" : "text-red-600"
+                    )}
+                    placeholder="计入账单..."
+                />
             </div>
 
             {(open || full) &&

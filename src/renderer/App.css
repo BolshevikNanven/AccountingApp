@@ -129,3 +129,28 @@ body {
   transition: all ease-in-out .14s;
   z-index: 30;
 }
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 5px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgb(255,255,255,.22);
+  border-radius: 5px;
+  background-clip: padding-box;
+  border: 3px solid transparent;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(0,0,0,.22);
+  border-radius: 5px;
+  background-clip: padding-box;
+  border: 3px solid transparent;
+}

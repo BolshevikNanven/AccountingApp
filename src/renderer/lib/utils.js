@@ -1,7 +1,7 @@
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-import { accountingType } from "../components/icons/icons";
+import { accountingOutType } from "../components/icons/icons";
 
 /**
  * 样式合并
@@ -35,10 +35,10 @@ export function debounce(fn, wait) {
  * @returns 
  */
 export function findFatherType(type) {
-  for (let key of Object.keys(accountingType)) {
-      if (accountingType[key].includes(type)) {
-          return key;
-      }
+  for (let key of Object.keys(accountingOutType)) {
+    if (accountingOutType[key].includes(type)) {
+      return key;
+    }
   }
 
 }

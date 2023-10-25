@@ -5,6 +5,7 @@ export type BillType = {
     datetime: string,
     bigType: string,
     type: string,
+    out: boolean,
     count: number,
     ledger: string,
     note: string,

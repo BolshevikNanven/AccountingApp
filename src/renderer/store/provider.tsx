@@ -12,7 +12,8 @@ const testData = [
         datetime: '2023-10-23 18:00:00',
         bigType: '餐饮',
         type: '小吃',
-        count: -648,
+        out: true,
+        count: 648,
         ledger: '默认账本',
         note: '吃了勾式',
         options: []
@@ -22,7 +23,8 @@ const testData = [
         datetime: '2023-10-23 18:10:00',
         bigType: '餐饮',
         type: '小吃',
-        count: -648,
+        out: true,
+        count: 648,
         ledger: '默认账本',
         note: '吃了勾式',
         options: []
@@ -32,7 +34,8 @@ const testData = [
         datetime: '2023-10-23 18:40:00',
         bigType: '餐饮',
         type: '小吃',
-        count: -648,
+        out: true,
+        count: 648,
         ledger: '默认账本',
         note: '吃了式',
         options: ['已报销']

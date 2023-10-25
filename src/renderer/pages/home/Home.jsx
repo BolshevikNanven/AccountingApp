@@ -45,20 +45,20 @@ export default function Home() {
                             <InOutCard
                                 title={'支出'}
                                 count={'-543.2'}
-                                className={' bg-red-400 '}
+                                className={'  bg-emerald-400'}
                                 icon={<TrendingUp className=" text-white" />}
                             />
                             <InOutCard
                                 title={'收入'}
                                 count={'+113.42'}
-                                className={' bg-emerald-400 '}
+                                className={' bg-red-400 '}
                                 icon={<TrendingDown className=" text-white" />}
                             />
                         </div>
                         <div className="flex flex-row px-2 my-2 items-center gap-1">
                             <div className="flex flex-col gap-[2px] w-4 h-3">
-                                <span className=" rounded-full flex-1 bg-red-400" />
                                 <span className=" rounded-full flex-1 bg-emerald-400" />
+                                <span className=" rounded-full flex-1 bg-red-400" />
                             </div>
                             <p className=" text-sm text-zinc-700 font-semibold">-429.78</p>
                         </div>
