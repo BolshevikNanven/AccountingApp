@@ -1,11 +1,11 @@
 import {
-    Utensils, Drumstick, Dribbble, Bike, Footprints, Waves, Dumbbell, Coffee, Car, BusFront, CarTaxiFront, TramFront,
+    Utensils, Drumstick, Bike, Dumbbell, Coffee, Car, BusFront, CarTaxiFront, TramFront,
     Apple, Plane, Ship, TrainFront, Bus, ParkingSquare, Forklift, Ticket, ConciergeBell, Baby, Gem, Refrigerator,
-    Bath, Power, Fuel, Newspaper, Phone, Headphones, Film, ShoppingCart, FlameKindling, Mountain, Tent, Cake,
-    Dessert, Sandwich, IceCream, Bird, Beer, Cigarette, AirVent, Shirt, Book, Brush,
+    Bath, Fuel, Newspaper, Phone, Headphones, Film, ShoppingCart, FlameKindling, Mountain, Tent, 
+     Sandwich, IceCream, Bird, Beer, Cigarette, AirVent, Shirt, Book, Brush,
     Palette, Stethoscope, Tablets, Pill, Cross, Soup,
     Milk, Home, Zap, Scissors, Receipt, Camera, Gift, Flower2, RadioTower, BadgeDollarSign, Heart,
-    Gamepad2, Palmtree, Drama, Mic2, Wine, ActivitySquare
+    Gamepad2, Palmtree, Drama, Mic2, Wine,
 } from "lucide-react"
 
 import { cn, findFatherType } from "../../lib/utils";
