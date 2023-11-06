@@ -8,7 +8,7 @@ import NavigationItem from "./navigationItem"
 
 import {
     HomeRegular, HomeFilled, CalendarRegular, CalendarFilled, ClipboardBulletListLtrRegular, ClipboardBulletListLtrFilled,
-    StackRegular, StackFilled, SettingsRegular,SettingsFilled
+    BookRegular,BookFilled, SettingsRegular,SettingsFilled
 } from "@fluentui/react-icons"
 
 import { WeatherSunnyRegular, WeatherMoonRegular } from "@fluentui/react-icons"
@@ -22,13 +22,12 @@ export default function NavigationSideBar() {
                     <NavigationItem icon={<HomeRegular />} activeIcon={<HomeFilled />} label={"主页"} routeTo={'/'} exact />
                     <NavigationItem icon={<ClipboardBulletListLtrRegular />} activeIcon={<ClipboardBulletListLtrFilled />} label={"流水明细"} routeTo={'/details'} />
                     <NavigationItem icon={<CalendarRegular />} activeIcon={<CalendarFilled />} label={"流水日历"} routeTo={'/calendar'} />
-                    <NavigationItem icon={<StackRegular />} activeIcon={<StackFilled />} label={"资产"} routeTo={'/account'} />
+                    <NavigationItem icon={<BookRegular />} activeIcon={<BookFilled />} label={"账本"} routeTo={'/books'} />
                 </div>
             </ScrollArea>
             <div className="flex flex-col w-full p-2 gap-2">
                 <Separator className=" bg-gray-300 w-[36px] mx-auto" />
                 <ModeToggle />
-                <NavigationItem icon={<SettingsRegular />} activeIcon={<SettingsFilled />} label={"设置"} routeTo={'/settings'} />
             </div>
         </div>
     )
@@ -37,7 +36,6 @@ export default function NavigationSideBar() {
 export function ModeToggle() {
 
     const [theme, toggleTheme] = useTheme()
-    
 
     return (
         <Button onClick={toggleTheme} variant="ghost" size="icon" className="mx-auto flex justify-center items-center text-3xl font-bold w-[46px] h-[46px] rounded-[8px] transition-all hover:bg-gray-200 active:bg-gray-300 dark:hover:bg-zinc-800 dark:active:bg-zinc-850">

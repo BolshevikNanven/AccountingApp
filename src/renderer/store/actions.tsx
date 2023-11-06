@@ -12,4 +12,8 @@ export type BillActions =
     {
         type: 'DELETE',
         payload: BillType,
+    } |
+    {
+        type: 'INIT',
+        payload: BillType[]
     };

@@ -12,8 +12,12 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+
+import webpackPaths from '../../.erb/configs/webpack.paths'
+
+import { SqlDatabase } from './db/db'
+import { BillDbServe, } from './db/serve';
 
 class AppUpdater {
   constructor() {
@@ -23,7 +27,9 @@ class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+let mainWindow = null;
+
+
 
 ipcMain.on('windowButton', async (event, arg) => {
   switch (arg) {
@@ -44,7 +50,7 @@ ipcMain.on('windowButton', async (event, arg) => {
       break;
     }
   }
-  
+
 });
 
 if (process.env.NODE_ENV === 'production') {
@@ -54,6 +60,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+
 
 if (isDebug) {
   require('electron-debug')();
@@ -65,14 +72,14 @@ const createWindow = async () => {
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
 
-  const getAssetPath = (...paths: string[]): string => {
+  const getAssetPath = (...paths) => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1148,
-    height: 728,
+    width: 1078,
+    height: 698,
     frame: false,
     icon: getAssetPath('icon.png'),
     webPreferences: {
@@ -99,8 +106,6 @@ const createWindow = async () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
 
   // Open urls in the user's browser
   mainWindow.webContents.setWindowOpenHandler((edata) => {
@@ -134,5 +139,19 @@ app
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
     });
+
+    const db = new SqlDatabase(isDebug ? path.join(webpackPaths.appPath, 'sql', 'data.db') : path.join(app.getPath('userData'), 'data.db'));
+
+    ipcMain.handle('Bill', async (_event, action, payload) => {
+      const dbServe = new BillDbServe(db);
+
+      switch (action) {
+        case 'getAll': return dbServe.getAll(db);
+        case 'add': return dbServe.add(payload);
+        case 'edit': return dbServe.edit(payload);
+        case 'delete': return dbServe.delete(payload);
+      }
+    })
+
   })
   .catch(console.log);

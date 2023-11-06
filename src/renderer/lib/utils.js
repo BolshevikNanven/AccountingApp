@@ -2,6 +2,7 @@ import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 import { accountingOutType } from "../components/icons/icons";
+import dayjs from "dayjs";
 
 /**
  * 样式合并
@@ -40,5 +41,23 @@ export function findFatherType(type) {
       return key;
     }
   }
+}
 
+/**
+ * 按日期分组
+ * @param {Array} billdata 
+ * @returns {Map}
+ */
+export function resortToGroupByDatetime(billdata) {
+  let data = new Map();
+  for (let i of billdata) {
+    const time = dayjs(i.datetime).format('YYYY-MM-DD');
+
+    if (!data.has(time)) {
+      data.set(time, [i]);
+      continue
+    }
+    data.set(time, [...data.get(time), i])
+  }
+  return data;
 }

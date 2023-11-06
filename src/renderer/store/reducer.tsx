@@ -1,11 +1,11 @@
 import { BillActions } from "./actions";
+import { BillIpc } from "./ipc";
 
 export type BillType = {
     id: string,
     datetime: string,
-    bigType: string,
+    big_type: string,
     type: string,
-    out: boolean,
     count: number,
     ledger: string,
     note: string,
@@ -15,9 +15,11 @@ export type BillType = {
 export function billdataReducer(billdata: BillType[], action: BillActions) {
     switch (action.type) {
         case 'ADD': {
+            BillIpc.add(action.payload);
             return [action.payload, ...billdata];
         }
         case 'EDIT': {
+            BillIpc.edit(action.payload);
             return billdata.map(bill => {
                 if (bill.id === action.payload.id) {
                     return action.payload;
@@ -25,9 +27,12 @@ export function billdataReducer(billdata: BillType[], action: BillActions) {
             });
         }
         case 'DELETE': {
+            BillIpc.delete(action.payload.id);
             return billdata.filter(bill => bill.id !== action.payload.id);
         }
-        default:
-            return billdata;
+        case 'INIT': {
+            return action.payload;
+        }
+        default: return billdata;
     }
 }

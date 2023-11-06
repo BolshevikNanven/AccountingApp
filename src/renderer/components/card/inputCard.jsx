@@ -4,7 +4,7 @@ import { cn } from "../../lib/utils"
 import dayjs from "dayjs";
 import { nanoid } from "nanoid";
 
-import { CalendarDays, Check, CheckCircle2, ChevronDown, ChevronsUpDown, Minus, Plus, XCircle } from "lucide-react";
+import { CalendarDays, CheckCircle2, ChevronDown, ChevronsUpDown, Minus, Plus, XCircle } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import Timepicker from "../picker/timepicker";
@@ -22,12 +22,12 @@ import { ScrollArea } from "../ui/scrollarea";
 import { Checkbox } from "../ui/checkbox";
 import { useToast } from "../ui/toast/use-toast";
 import TypePicker from "../picker/typepicker";
+import Datepicker from "../picker/datepicker";
 
 const emptyData = () => ({
     id: nanoid(),
     datetime: dayjs().format('YYYY-MM-DD HH:mm'),
-    out: true,
-    bigType: null,
+    big_type: '餐饮',
     type: '餐饮',
     count: '',
     ledger: '默认账本',
@@ -39,6 +39,7 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
 
     const [open, setOpen] = useState(false);
     const [billdata, setBilldata] = useState(emptyData())
+    const [income, setIncome] = useState(false);
 
     const { toast } = useToast();
 
@@ -48,27 +49,34 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
 
     /** not finished*/
     useEffect(() => {
-        const focusInput = (e) => {
+        const listenKey = (e) => {
             if ((e.keyCode >= 48 && e.keyCode <= 57 || e.keyCode === 189) && inputRef.current.value === '') {
                 inputRef.current.focus();
             }
         }
 
-        window.addEventListener('keydown', focusInput);
+        window.addEventListener('keydown', listenKey);
 
-        return () => window.removeEventListener('keydown', focusInput);
+        return () => window.removeEventListener('keydown', listenKey);
     }, [])
 
     useEffect(() => {
         if (data === null) {
             setBilldata(emptyData())
-        } else setBilldata(data)
+        } else {
+            setBilldata({ ...data, count: Math.abs(data.count) })
+            if (data.count > 0) setIncome(true)
+        }
 
         //渐入动画
         playAnimation();
 
     }, [data])
     const handleInputDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSubmit();
+        }
         if (e.key === '-' || e.key === '+' || e.key === 'e') {
             e.preventDefault()
         }
@@ -81,14 +89,22 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
     const handleInputNote = (e) => {
         setBilldata({ ...billdata, note: e.target.value });
     }
+    const handleSelectDate = (date) => {
+        setBilldata({ ...billdata, datetime: `${date} ${dayjs(billdata.datetime).format('HH:mm')}` })
+    }
     const handleSelectTime = (time) => {
         setBilldata({ ...billdata, datetime: dayjs(billdata.datetime).format('YYYY-MM-DD ') + time })
     }
     const handleSelectType = (bigType, type) => {
-        setBilldata({ ...billdata, bigType: bigType, type: type })
+        setBilldata({ ...billdata, big_type: bigType, type: type })
     }
     const handleInout = () => {
-        setBilldata({ ...billdata, out: !billdata.out })
+        if (!income) {
+            setBilldata({ ...billdata, big_type: '收入', type: '红包' })
+        } else {
+            setBilldata({ ...billdata, big_type: '餐饮', type: '餐饮' })
+        }
+        setIncome(income => !income)
     }
     const handleFold = () => {
         setOpen(prev => !prev)
@@ -107,7 +123,8 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
             })
             return;
         }
-        onSubmit('confirm', billdata);
+        const actualCount = income ? Number.parseFloat(billdata.count) : -billdata.count;
+        onSubmit('confirm', { ...billdata, count: actualCount });
         if (data === null) setBilldata(emptyData());
         toast({
             variant: 'success',
@@ -119,6 +136,9 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
             )
             ,
         })
+        if (!full) {
+            setOpen(false)
+        }
         playAnimation();
     }
     const handleDelete = () => {
@@ -169,7 +189,7 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
                 </div>
             }
             <div className="inputUnderline h-[46px] flex flex-row items-center bg-zinc-100 focus-within:bg-white border rounded-md mb-3">
-                <TypePicker icontype={billdata.out ? 'out' : 'in'} onSelectType={handleSelectType}>
+                <TypePicker icontype={income ? 'in' : 'out'} onSelectType={handleSelectType}>
                     <Button className="m-0 py-0 h-full px-1 pr-3 rounded-none" variant="ghost">
                         <Icons name={billdata.type} />
                         <p className=" whitespace-nowrap text-md">{billdata.type}</p>
@@ -178,7 +198,7 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
 
                 <Separator className="h-[28px]" orientation="vertical" />
                 <button onClick={handleInout} className=" h-full px-1 pr-0">
-                    {billdata.out ? <Minus strokeWidth={3} className=" text-green-600 w-5 h-5" /> : <Plus strokeWidth={2.8} className=" text-red-600 w-5 h-5 " />}
+                    {income ? <Plus strokeWidth={2.8} className=" text-red-600 w-5 h-5 " /> : <Minus strokeWidth={3} className=" text-green-600 w-5 h-5" />}
                 </button>
                 <input
                     ref={inputRef}
@@ -188,7 +208,7 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
                     onInput={handleInputCount}
                     onKeyDown={handleInputDown}
                     className={cn(" min-w-0 bg-transparent outline-none p-3 pl-0 h-full flex-1 font-semibold text-lg placeholder:font-normal placeholder:text-base",
-                        billdata.out ? "text-green-600" : "text-red-600"
+                        income ? "text-red-600" : "text-green-600"
                     )}
                     placeholder="计入账单..."
                 />
@@ -199,18 +219,14 @@ const InputCard = ({ data = null, className, full, edit, transition, autofocus, 
                     <div className=" flex flex-col text-zinc-600 mb-3">
                         <span className="text-zin-600 font-semibold text-sm pl-[2px] mb-1">时间</span>
                         <div className="flex flex-row">
-                            <Popover>
-                                <PopoverTrigger
-                                    className="bg-zinc-100 focus-within:bg-white h-[42px] inputUnderline border flex flex-row items-center gap-1 border-r-0  hover:bg-zinc-200 rounded-md rounded-r-none p-[10px] px-3 text-sm"
+                            <Datepicker defaultDate={dayjs(billdata.datetime).toDate()} onSelectDate={handleSelectDate}>
+                                <Button
+                                    className="bg-zinc-100 focus-within:bg-white h-[42px] text-zinc-900 inputUnderline border flex flex-row items-center gap-1 border-r-0  hover:bg-zinc-200 rounded-md rounded-r-none p-[10px] px-3 text-sm"
                                 >
                                     {dayjs(billdata.datetime).format('M月DD日')}
                                     <CalendarDays className=" w-4 h-4 text-zinc-600" />
-                                </PopoverTrigger>
-                                <PopoverContent className="p-0">
-                                    日历
-                                </PopoverContent>
-                            </Popover>
-
+                                </Button>
+                            </Datepicker>
                             <Timepicker defaultTime={dayjs(billdata.datetime).format('HH:mm')} onSelectTime={handleSelectTime}>
                                 <Button className="bg-zinc-100 focus-within:bg-white h-[42px] text-zinc-900 inputUnderline border flex flex-row items-center gap-1 hover:bg-zinc-200 rounded-md rounded-l-none p-[10px] text-sm">
                                     {dayjs(billdata.datetime).format('HH:mm')}

@@ -1,44 +1,21 @@
 import { nanoid } from "nanoid";
-import { createContext, useContext, useReducer } from "react"
+import { createContext, useContext, useEffect, useReducer } from "react"
 
 import { BillType, billdataReducer } from "./reducer";
 import { BillActions } from "./actions";
-
+import { BillIpc } from "./ipc";
 
 
 const testData = [
     {
         id: nanoid(),
-        datetime: '2023-10-23 18:00:00',
-        bigType: '餐饮',
-        type: '小吃',
-        out: true,
-        count: 648,
-        ledger: '默认账本',
-        note: '吃了勾式',
+        datetime: '',
+        big_type: '',
+        type: '',
+        count: 0,
+        ledger: '',
+        note: '',
         options: []
-    },
-    {
-        id: nanoid(),
-        datetime: '2023-10-23 18:10:00',
-        bigType: '餐饮',
-        type: '小吃',
-        out: true,
-        count: 648,
-        ledger: '默认账本',
-        note: '吃了勾式',
-        options: []
-    },
-    {
-        id: nanoid(),
-        datetime: '2023-10-23 18:40:00',
-        bigType: '餐饮',
-        type: '小吃',
-        out: true,
-        count: 648,
-        ledger: '默认账本',
-        note: '吃了式',
-        options: ['已报销']
     }
 ]
 
@@ -51,8 +28,13 @@ export function useBilldata(): [BillType[], ({ type, payload }: BillActions) => 
 
 export default function DataProvider({ children }: { children: any }) {
 
-    const [billdata, dispatchBilldata] = useReducer(billdataReducer, initialBilldata());
+    const [billdata, dispatchBilldata] = useReducer(billdataReducer, testData);
 
+    useEffect(() => {
+        BillIpc.get().then((res: any) => {
+            dispatchBilldata({ type: 'INIT', payload: res })
+        })
+    }, [])
 
     return (
         <dataContext.Provider
@@ -61,8 +43,4 @@ export default function DataProvider({ children }: { children: any }) {
             {children}
         </dataContext.Provider>
     )
-}
-
-function initialBilldata() {
-    return testData;
 }

@@ -12,7 +12,8 @@ import { useBilldata } from "../../store/provider"
 
 import { ListPlus, X, Book, Plus, Filter } from "lucide-react"
 
-import { cn } from "../../lib/utils"
+import { cn, resortToGroupByDatetime } from "../../lib/utils"
+import dayjs from "dayjs"
 
 
 
@@ -62,14 +63,27 @@ export default function Details() {
         setSidebarOpen(true);
     }
 
-    const renderBillData = useMemo(() => 
-        billdata.map(bill =>
-            <DetailsCard
-                key={bill.id}
-                onClick={() => handleSelectBill(bill.id)} {...bill}
-                className="mb-2 mx-3 pr-3 bg-white transition-shadow hover:shadow"
-            />
-    ,[billdata]))
+    const renderBillData = useMemo(() => {
+        const sortedBill = resortToGroupByDatetime(billdata);
+        let dom = [];
+
+        sortedBill.forEach((value, key) => {
+            dom.push(
+                <div key={key} className="flex flex-col mb-3">
+                    <p key={key} className=" ml-5 mb-1 text-zinc-700 dark:text-zinc-400 text-sm font-semibold">{dayjs(key).format('M月D日')}</p>
+                    {value.map(bill =>
+                        <DetailsCard
+                            key={bill.id}
+                            onClick={() => handleSelectBill(bill.id)} {...bill}
+                            className="mb-2 mx-3 pr-3 bg-white dark:bg-zinc-700/80 transition-shadow hover:shadow"
+                        />
+                    )}
+                </div>
+            )
+        })
+
+        return dom
+    }, [billdata])
 
     return (
         <>
@@ -80,7 +94,7 @@ export default function Details() {
                     {!sidebarOpen && <Button variant='outline' className="px-2 pr-3 h-8 mr-2" onClick={handleNewBill}><Plus className="w-5 h-5 text-zinc-600 mr-1 " />新增</Button>}
                 </MainHeader>
                 <ScrollArea className={cn(" pt-2 flex-1")}>
-                   {renderBillData}
+                    {renderBillData}
                 </ScrollArea>
             </div>
             <div className={cn("h-full w-[356px] p-3 pb-4 pt-[48px] overflow-hidden transition-all", !sidebarOpen && "w-0 px-0")}>

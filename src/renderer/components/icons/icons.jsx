@@ -1,11 +1,11 @@
 import {
     Utensils, Drumstick, Bike, Dumbbell, Coffee, Car, BusFront, CarTaxiFront, TramFront,
     Apple, Plane, Ship, TrainFront, Bus, ParkingSquare, Forklift, Ticket, ConciergeBell, Baby, Gem, Refrigerator,
-    Bath, Fuel, Newspaper, Phone, Headphones, Film, ShoppingCart, FlameKindling, Mountain, Tent, 
-     Sandwich, IceCream, Bird, Beer, Cigarette, AirVent, Shirt, Book, Brush,
+    Bath, Fuel, Newspaper, Phone, Headphones, Film, ShoppingCart, FlameKindling, Mountain, Tent,
+    Sandwich, IceCream, Bird, Beer, Cigarette, AirVent, Shirt, Book, Brush,
     Palette, Stethoscope, Tablets, Pill, Cross, Soup,
     Milk, Home, Zap, Scissors, Receipt, Camera, Gift, Flower2, RadioTower, BadgeDollarSign, Heart,
-    Gamepad2, Palmtree, Drama, Mic2, Wine,
+    Gamepad2, Palmtree, Drama, Mic2, Wine, Droplet
 } from "lucide-react"
 
 import { cn, findFatherType } from "../../lib/utils";
@@ -13,9 +13,9 @@ import ExtraIcon from "./extraIcon";
 
 export const accountingOutType = {
     '餐饮': ["餐饮", "早餐", "中餐", "晚餐", "小吃", "下午茶", "夜宵", "水果", "饮料"],
-    '交通': ["交通", "打车", "公交车", '长途汽车', "自行车", "飞机", "轮船", "火车", "地铁", "油费", "停车费", "修车费", "过路费"],
+    '交通': ["交通", "打车", "公交车", '长途汽车', "骑行", "飞机", "轮船", "火车", "地铁", "油费", "停车费", "修车费", "过路费"],
     '购物': ["购物", "酒", "烟", "衣服", "婴儿用品", "美容化妆", "百货", "数码产品", "书籍", "电器", "文具", "珠宝首饰", "家具"],
-    '日常': ["房租", "电费", "美容美发", "报纸", "话费", "婚庆摄影", "网费", "其他费用"],
+    '日常': ["房租", "电费", "水费", "美容美发", "报纸", "话费", "婚庆摄影", "网费", "其他费用"],
     '娱乐': ["电影", "电玩", "烧烤", "聚会", "茶酒咖啡", "旅游度假", "运动健身", "花鸟宠物", "歌舞演出", "卡拉OK", "爬山", "露营"],
 
     '医教': ["就诊", "药剂", "药丸", "急救"],
@@ -59,7 +59,7 @@ export default function Icons({ name, className }) {
         case '打车': return <IconBox className={className} name={findFatherType(name)}><CarTaxiFront width={22} height={22} /></IconBox >;
         case '公交车': return <IconBox className={className} name={findFatherType(name)}><BusFront width={22} height={22} /></IconBox >;
         case '长途汽车': return <IconBox className={className} name={findFatherType(name)}><Bus width={22} height={22} /></IconBox >;
-        case '自行车': return <IconBox className={className} name={findFatherType(name)}><Bike width={22} height={22} /></IconBox >;
+        case '骑行': return <IconBox className={className} name={findFatherType(name)}><Bike width={22} height={22} /></IconBox >;
         case '飞机': return <IconBox className={className} name={findFatherType(name)}><Plane width={22} height={22} /></IconBox >;
         case '轮船': return <IconBox className={className} name={findFatherType(name)}><Ship width={22} height={22} /></IconBox >;
         case '火车': return <IconBox className={className} name={findFatherType(name)}><TrainFront width={22} height={22} /></IconBox >;
@@ -87,6 +87,7 @@ export default function Icons({ name, className }) {
 
         case '房租': return <IconBox className={className} name={findFatherType(name)}><Home width={22} height={22} /></IconBox >;
         case '电费': return <IconBox className={className} name={findFatherType(name)}><Zap width={22} height={22} /></IconBox >;
+        case '水费': return <IconBox className={className} name={findFatherType(name)}><Droplet width={22} height={22} /></IconBox >;
         case '美容美发': return <IconBox className={className} name={findFatherType(name)}><Scissors width={22} height={22} /></IconBox >;
         case '报纸': return <IconBox className={className} name={findFatherType(name)}><Newspaper width={22} height={22} /></IconBox >;
         case '话费': return <IconBox className={className} name={findFatherType(name)}><Phone width={22} height={22} /></IconBox >;

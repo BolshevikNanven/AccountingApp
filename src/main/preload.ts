@@ -2,7 +2,9 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'windowButton';
+export type Channels = 'windowButton' | 'Bill';
+
+export type BillActions = 'add' | 'edit' | 'delete' | 'getAll' | 'getById';
 
 const electronHandler = {
   ipcRenderer: {
@@ -19,9 +21,15 @@ const electronHandler = {
       };
     },
     once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
+      ipcRenderer.once(channel, (_event: IpcRendererEvent, ...args: unknown[]) => func(...args));
     },
   },
+  ipcHandleInvoke: async (channel: Channels, action: BillActions, payload?: any): Promise<any> => {
+    let resp;
+    await ipcRenderer.invoke(channel, action, payload).then((res: any) => resp = res)
+    
+    return resp;
+  }
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
