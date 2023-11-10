@@ -154,3 +154,22 @@ body {
   background-clip: padding-box;
   border: 3px solid transparent;
 }
+
+.turnpage{
+  transform-style: preserve-3d;
+  perspective: 900px;
+}
+.turnpage>.page{
+  transform-origin: left;
+  transition: transform ease .78s;
+  z-index: 2;
+}
+.turnpage>.page.active{
+  left: 50%;
+  transform: rotateY(-180deg);
+  transition: transform ease 1.12s;
+}
+.turnpage>.page.active input,.turnpage>.page.active p{
+  transform: rotateY(-180deg);
+  transition: transform ease 1.12s;
+}

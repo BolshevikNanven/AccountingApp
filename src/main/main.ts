@@ -17,14 +17,10 @@ import { resolveHtmlPath } from './util';
 import webpackPaths from '../../.erb/configs/webpack.paths'
 
 import { SqlDatabase } from './db/db'
-import { BillDbServe, } from './db/serve';
+import { BillDbServe,LedgerDbServe } from './db/serve';
 
 class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
+  
 }
 
 let mainWindow = null;
@@ -146,7 +142,19 @@ app
       const dbServe = new BillDbServe(db);
 
       switch (action) {
-        case 'getAll': return dbServe.getAll(db);
+        case 'getAll': return dbServe.getAll();
+        case 'getByLedger': return dbServe.getByLedger(payload);
+        case 'add': return dbServe.add(payload);
+        case 'edit': return dbServe.edit(payload);
+        case 'delete': return dbServe.delete(payload);
+      }
+    })
+
+    ipcMain.handle('Ledger', async (_event, action, payload) => {
+      const dbServe = new LedgerDbServe(db);
+
+      switch (action) {
+        case 'getAll': return dbServe.getAll();
         case 'add': return dbServe.add(payload);
         case 'edit': return dbServe.edit(payload);
         case 'delete': return dbServe.delete(payload);

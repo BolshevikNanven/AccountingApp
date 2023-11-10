@@ -98,6 +98,7 @@
   "dependencies": {
     "@fluentui/react-icons": "^2.0.220",
     "@radix-ui/react-checkbox": "^1.0.4",
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-scroll-area": "^1.0.5",
@@ -107,6 +108,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "color": "^4.2.3",
     "dayjs": "^1.11.10",
     "echarts": "^5.4.3",
     "electron": "^25.9.3",
@@ -195,8 +197,8 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "212Accounting",
+    "appId": "org.scau212.accounting",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

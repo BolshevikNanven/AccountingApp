@@ -27,7 +27,7 @@ export default function Timepicker({ defaultTime, onSelectTime = (time) => { }, 
                 {children}
             </PopoverTrigger>
             <PopoverContent className="p-0 w-auto">
-                <TimepickerContent defaultTime={defaultTime} onSelectTime={handleSelectTime}/>
+                <TimepickerContent defaultTime={defaultTime} onSelectTime={handleSelectTime} />
             </PopoverContent>
         </Popover>
 
@@ -84,8 +84,8 @@ function TimepickerContent({ defaultTime, onSelectTime = () => { } }) {
                             key={hour}
                             onClick={() => handleSelectHour(hour)}
                             className={cn(
-                                "w-full text-center p-1 hover:bg-zinc-100 transition-colors text-sm rounded",
-                                hour === getHour() && " bg-blue-200 hover:bg-blue-200",
+                                "w-full text-center p-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors text-sm rounded",
+                                hour === getHour() && " bg-blue-200 hover:bg-blue-200 dark:bg-blue-800 hover:dark:bg-blue-800",
                             )}
                         >
                             {hour}
@@ -100,8 +100,8 @@ function TimepickerContent({ defaultTime, onSelectTime = () => { } }) {
                             key={minute}
                             onClick={() => handleSelectMinute(minute)}
                             className={cn(
-                                "w-full text-center p-1 hover:bg-zinc-100 transition-colors text-sm rounded",
-                                minute === getMinute() && " bg-blue-200 hover:bg-blue-200",
+                                "w-full text-center p-1 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors text-sm rounded",
+                                minute === getMinute() && " bg-blue-200 hover:bg-blue-200 dark:bg-blue-800 hover:dark:bg-blue-800",
                             )}
                         >
                             {minute}
@@ -110,9 +110,9 @@ function TimepickerContent({ defaultTime, onSelectTime = () => { } }) {
                     <div className="w-full h-[196px]"></div>
                 </ScrollArea>
             </div>
-            <div className="flex flex-row justify-between items-center p-2 bg-zinc-100 rounded-b-sm">
+            <div className="flex flex-row justify-between items-center p-2 bg-zinc-100 dark:bg-zinc-800 rounded-b-sm">
                 <Button onClick={handleClickNow} variant={'ghost'} className=" h-7 px-2 text-sm text-primary hover:text-primary hover:bg-primary/10">此刻</Button>
-                <Button onClick={handleClickConfirm} className=" h-7 px-2 text-sm">确定</Button>
+                <Button onClick={handleClickConfirm} className=" h-7 px-2 text-sm dark:text-zinc-200">确定</Button>
             </div>
         </div>
     )

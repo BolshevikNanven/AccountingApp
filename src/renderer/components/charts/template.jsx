@@ -1,6 +1,7 @@
 import * as echarts from "echarts"
 
 export const pieChartOptionTemplate = (type, data) => ({
+    backgroundColor:'',
     title: {
     },
     tooltip: {
@@ -32,6 +33,7 @@ export const pieChartOptionTemplate = (type, data) => ({
     ]
 })
 export const lineChartOptionTemplate = (color, xAxis, type, data) => ({
+    backgroundColor:'',
     title: {
     },
     tooltip: {

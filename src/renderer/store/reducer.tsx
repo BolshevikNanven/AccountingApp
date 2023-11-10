@@ -1,5 +1,6 @@
-import { BillActions } from "./actions";
-import { BillIpc } from "./ipc";
+import dayjs from "dayjs";
+import { BillActions, LedgerActions } from "./actions";
+import { BillIpc, LedgerIpc } from "./ipc";
 
 export type BillType = {
     id: string,
@@ -7,16 +8,34 @@ export type BillType = {
     big_type: string,
     type: string,
     count: number,
-    ledger: string,
     note: string,
     options: Array<any>,
+    ledger_id: string,
 }
 
-export function billdataReducer(billdata: BillType[], action: BillActions) {
+export type LedgerType = {
+    id: string,
+    name: string,
+    create_time: string,
+    update_time: string,
+    note: string,
+    color: string,
+}
+
+export function billDataReducer(billdata: BillType[], action: BillActions) {
+
+    const sortByDatetime = (data: BillType[]): BillType[] => {
+        return data.sort((a: BillType, b: BillType): number => {
+            if (dayjs(a.datetime).isBefore(b.datetime)) {
+                return 1
+            } else return -1
+        })
+    }
+
     switch (action.type) {
         case 'ADD': {
-            BillIpc.add(action.payload);
-            return [action.payload, ...billdata];
+            BillIpc.add(action.payload, dayjs().format('YYYY-MM-DD HH:mm'));
+            return sortByDatetime([action.payload, ...billdata])
         }
         case 'EDIT': {
             BillIpc.edit(action.payload);
@@ -34,5 +53,30 @@ export function billdataReducer(billdata: BillType[], action: BillActions) {
             return action.payload;
         }
         default: return billdata;
+    }
+}
+
+export function ledgerDataReducer(ledgerData: LedgerType[], action: LedgerActions) {
+    switch (action.type) {
+        case 'ADD': {
+            LedgerIpc.add(action.payload);
+            return [...ledgerData, action.payload]
+        }
+        case 'EDIT': {
+            LedgerIpc.edit(action.payload);
+            return ledgerData.map(ledger => {
+                if (ledger.id === action.payload.id) {
+                    return action.payload;
+                } else return ledger;
+            });
+        }
+        case 'DELETE': {
+            LedgerIpc.delete(action.payload);
+            return ledgerData.filter(ledger => ledger.id !== action.payload);
+        }
+        case 'INIT': {
+            return action.payload
+        }
+        default: return ledgerData;
     }
 }

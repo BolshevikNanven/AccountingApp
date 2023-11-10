@@ -17,7 +17,7 @@ export default function DropdownSelector({ value, icon, valuesOption, onChangeVa
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className={cn("flex flex-row items-center p-1 pr-1 px-2 text-sm text-zinc-800 rounded outline-none border-none hover:bg-zinc-200/60 transition-all", className)}>
+                <button className={cn("flex flex-row items-center p-1 pr-1 px-2 text-sm text-zinc-800 dark:text-zinc-100 rounded outline-none border-none dark:hover:bg-zinc-700 hover:bg-zinc-200/60 transition-all", className)}>
                     {icon}{value}<ChevronDown className="w-3 h-3 ml-1" />
                 </button>
             </DropdownMenuTrigger>
@@ -32,17 +32,25 @@ export default function DropdownSelector({ value, icon, valuesOption, onChangeVa
 
 export function DropdownRadioSelector({ value, icon, valuesOption, onChangeValue = () => { }, className }) {
 
+    const getLabel = (value) => {
+        for (let v of valuesOption) {
+            if (value === v.value) {
+                return v.label
+            }
+        }
+    }
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className={cn("flex flex-row items-center p-1 pr-1 px-2 text-sm text-zinc-800 rounded outline-none border-none hover:bg-zinc-200/60 transition-all", className)}>
-                    {icon}{value}<ChevronDown className="w-4 h-4" />
+                <button className={cn("flex flex-row items-center p-1 pr-1 px-2 text-sm text-zinc-800 dark:text-zinc-100 rounded outline-none border-0 dark:hover:bg-zinc-700 hover:bg-zinc-200/60 transition-all", className)}>
+                    {icon}{getLabel(value)}<ChevronDown className="w-4 h-4" />
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent >
                 <DropdownMenuRadioGroup value={value} onValueChange={onChangeValue}>
-                    {valuesOption.map(values =>
-                        <DropdownMenuRadioItem key={values} value={values}>{values}</DropdownMenuRadioItem>
+                    {valuesOption.map(option =>
+                        <DropdownMenuRadioItem key={option.value} value={option.value}>{option.label}</DropdownMenuRadioItem>
                     )}
                 </DropdownMenuRadioGroup>
             </DropdownMenuContent>
@@ -51,18 +59,25 @@ export function DropdownRadioSelector({ value, icon, valuesOption, onChangeValue
 }
 
 
-export function DropdownCheckSelector({ value, icon, valuesOption, onChangeValue = () => { }, className }) {
+export function DropdownCheckSelector({ value, check, icon, valuesOption, onCheckedChange = () => { }, className }) {
+
+    const checkValue = (value) => {
+        if (check.find(v => v === value)) {
+            return true
+        }
+        return false
+    }
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className={cn("flex flex-row items-center p-1 pr-1 px-2 text-sm text-zinc-800 rounded outline-none border-none hover:bg-zinc-200/60 transition-all", className)}>
+                <button className={cn("flex flex-row items-center p-1 pr-1 px-2 text-sm text-zinc-800 dark:text-zinc-100 rounded outline-none border-none hover:bg-zinc-200/60 dark:hover:bg-zinc-700 transition-all", className)}>
                     {icon}{value}<ChevronDown className="w-4 h-4" />
                 </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent >
+            <DropdownMenuContent>
                 {valuesOption.map(values =>
-                    <DropdownMenuCheckboxItem key={values} value={values}>{values}</DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem key={values} checked={checkValue(values)} onCheckedChange={(c) => onCheckedChange(values, c)}>{values}</DropdownMenuCheckboxItem>
                 )}
             </DropdownMenuContent>
         </DropdownMenu>

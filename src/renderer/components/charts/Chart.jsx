@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { debounce } from "../../lib/utils";
+import { computeNumber, debounce } from "../../lib/utils";
 
 import TabSelector from "../../components/selector/tab";
 import DropdownSelector from "../../components/selector/dropdown";
@@ -12,6 +12,7 @@ import 'dayjs/locale/zh-cn'
 dayjs.locale('zh-cn')
 
 import { lineChartOptionTemplate, pieChartOptionTemplate } from "./template";
+import { useTheme } from "../theme/theme";
 
 
 export default function Chart({ chartType, title, className, billdata }) {
@@ -19,6 +20,7 @@ export default function Chart({ chartType, title, className, billdata }) {
     const [typeState, setTypeState] = useState('支出')
     const [timeState, setTimeState] = useState('近7天')
     const chartsRef = useRef();
+    const [theme, setTheme] = useTheme()
 
 
     const timeFilterData = useCallback((range, inout, data) => {
@@ -91,7 +93,7 @@ export default function Chart({ chartType, title, className, billdata }) {
         dataArray.forEach((value, index) => {
             const dateKey = headDay.add(index, 'day').format('YYYY-MM-DD')
             if (dataMap.has(dateKey)) {
-                dataMap.get(dateKey).forEach(i => dataArray[index] += (inout === '收支' ? i.count : Math.abs(i.count)))
+                dataMap.get(dateKey).forEach(i => dataArray[index] = computeNumber(dataArray[index], '+', (inout === '收支' ? i.count : Math.abs(i.count))))
             }
         })
         return dataArray
@@ -107,7 +109,7 @@ export default function Chart({ chartType, title, className, billdata }) {
             mapvalues.forEach(value => {
                 const bigType = (inout === '支出' ? value.big_type : value.type)
                 if (classObj.hasOwnProperty(bigType)) {
-                    classObj[bigType] += Math.abs(value.count)
+                    classObj[bigType] = computeNumber(Math.abs(value.count), '+', classObj[bigType])
                 } else {
                     classObj[bigType] = Math.abs(value.count)
                 }
@@ -168,7 +170,7 @@ export default function Chart({ chartType, title, className, billdata }) {
     useEffect(() => {
         const chartsDom = chartsRef.current;
 
-        const charts = echarts.getInstanceByDom(chartsDom) || echarts.init(chartsDom);
+        const charts = echarts.getInstanceByDom(chartsDom) || echarts.init(chartsDom, theme === 'dark' && 'dark');
 
         charts.setOption(getChartOption());
 
@@ -176,10 +178,10 @@ export default function Chart({ chartType, title, className, billdata }) {
             charts.dispose();
         }
 
-    }, [typeState, timeState, billdata])
+    }, [typeState, timeState, theme, billdata])
     useEffect(() => {
         const chartsDom = chartsRef.current;
-        const charts = echarts.getInstanceByDom(chartsDom) || echarts.init(chartsDom);
+        const charts = echarts.getInstanceByDom(chartsDom) || echarts.init(chartsDom, theme === 'dark' && 'dark');
 
 
         window.addEventListener('resize', debounce(() => charts.resize(), 500))
@@ -192,8 +194,8 @@ export default function Chart({ chartType, title, className, billdata }) {
 
     return (
         <>
-            <p className={cn(" absolute top-0 left-[28px] font-semibold text-lg text-zinc-600", className)}>
-                <span className=" absolute bottom-0 left-0 h-[5px] w-[28px] rounded-full bg-gradient-to-r from-primary to-transparent"></span>
+            <p className={cn(" absolute top-0 left-[28px] font-semibold text-lg text-zinc-600 dark:text-zinc-200", className)}>
+                <span className=" absolute bottom-0 left-0 h-[5px] w-[28px] rounded-full bg-primary"></span>
                 {typeState + title}
             </p>
             <div className=" absolute top-0 right-2 z-20 flex flex-row gap-1">

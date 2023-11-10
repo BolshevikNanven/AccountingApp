@@ -1,4 +1,4 @@
-import { BillType } from "./reducer";
+import { BillType, LedgerType } from "./reducer";
 
 export type BillActions =
     {
@@ -17,3 +17,21 @@ export type BillActions =
         type: 'INIT',
         payload: BillType[]
     };
+
+export type LedgerActions =
+    {
+        type: 'ADD',
+        payload: LedgerType,
+    } |
+    {
+        type: 'DELETE',
+        payload: string,
+    } |
+    {
+        type: 'INIT',
+        payload: LedgerType[],
+    } |
+    {
+        type: 'EDIT',
+        payload: LedgerType,
+    }

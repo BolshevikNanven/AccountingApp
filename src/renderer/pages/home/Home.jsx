@@ -1,20 +1,20 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 
 import MainHeader from "../../components/mainHeader/MainHeader"
 import Chart from "../../components/charts/Chart";
 import DetailsCard from "../../components/card/detailsCard";
-import InOutCard from "../../components/card/inoutCard";
 import InputCard from "../../components/card/inputCard";
 
 
 import { ScrollArea } from "../../components/ui/scrollarea";
 import { TrendingUp, TrendingDown } from "lucide-react";
-import { useBilldata } from "../../store/provider";
+import { useBilldata } from "../../store/provider/data-provider";
 import dayjs from "dayjs";
-import { resortToGroupByDatetime } from "../../lib/utils";
+import { computeNumber, resortToGroupByDatetime } from "../../lib/utils";
+import LedgerSelector from "../../components/selector/ledger";
 
 
-export default function Home() {
+export default function HomePage() {
 
     const [billdata, dispatchBilldata] = useBilldata();
 
@@ -34,14 +34,15 @@ export default function Home() {
                 continue
             }
             if (data.count > 0) {
-                incount += data.count;
+                incount = computeNumber(incount, '+', data.count)
             }
             if (data.count < 0) {
-                outcount += data.count
+                outcount = computeNumber(outcount, '+', data.count)
             }
         }
 
-        sumcount = incount + outcount;
+
+        sumcount = computeNumber(incount, outcount)
 
         return [incount, outcount, sumcount];
 
@@ -60,7 +61,7 @@ export default function Home() {
                         <DetailsCard
                             key={bill.id}
                             {...bill}
-                            className="mb-2 "
+                            className="mb-1 bg-white dark:bg-zinc-700/80"
                         />
                     )}
                 </div>
@@ -73,7 +74,7 @@ export default function Home() {
 
     return (
         <>
-            <div className="flex-1 flex flex-col h-full overflow-x-hidden">
+            <div className="flex-1 flex flex-col h-full overflow-x-hidden pl-2">
                 <MainHeader title="主页" className=" px-4" />
 
                 <div className="relative w-full flex-1 pt-2 mt-2">
@@ -92,34 +93,26 @@ export default function Home() {
                 </div>
             </div>
             <div className="h-full w-[376px] pt-[38px] pl-2">
-                <div className="h-full w-full bg-white dark:bg-zinc-800 rounded-tl-[12px] border flex flex-col select-none">
-                    <header className=" relative text-xl font-semibold text-zinc-700 mx-4 pt-[16px] mb-4">
-                        本月账单<span className=" absolute bottom-0 left-0 h-[5px] w-[36px] rounded-full bg-gradient-to-r from-primary to-transparent" />
+                <div className="h-full w-full bg-white dark:bg-zinc-850 rounded-tl-[12px] border dark:border-zinc-600 flex flex-col select-none">
+                    <header className=" flex flex-row justify-between relative text-xl font-semibold text-zinc-700 dark:text-zinc-200 mx-5 pt-[16px] mb-2">
+                        本月账单<span className=" absolute bottom-0 left-0 h-[5px] w-[36px] rounded-full bg-primary" />
+                        <LedgerSelector iconless />
                     </header>
-                    <div className="w-full flex flex-col px-4">
-                        <div className=" flex flex-col gap-2 overflow-visible">
-                            <InOutCard
-                                title={'支出'}
-                                count={summaryCount[1]}
-                                className={'  bg-emerald-400'}
-                                icon={<TrendingUp className=" text-white" />}
-                            />
-                            <InOutCard
-                                title={'收入'}
-                                count={'+' + summaryCount[0]}
-                                className={' bg-red-400 '}
-                                icon={<TrendingDown className=" text-white" />}
-                            />
-                        </div>
-                        <div className="flex flex-row px-2 my-2 items-center gap-1">
-                            <div className="flex flex-col gap-[2px] w-4 h-3">
-                                <span className=" rounded-full flex-1 bg-emerald-400" />
-                                <span className=" rounded-full flex-1 bg-red-400" />
+                    <div className="flex flex-col mx-4 px-2 py-3 rounded-[8px] bg-zinc-100/50 dark:bg-zinc-700/30 mb-2">
+                        <p className="pl-1 font-semibold text-zinc-800 dark:text-zinc-200">收支</p>
+                        <div className=" flex flex-row rounded-[8px] bg-white dark:bg-zinc-700 p-3">
+                            <div className="flex flex-row items-center justify-between flex-1 font-semibold text-[21px] text-red-500">
+                                <TrendingUp />
+                                {'+' + summaryCount[0]}
                             </div>
-                            <p className=" text-sm text-zinc-700 font-semibold">{summaryCount[2]}</p>
+                            <span className=" w-[1px] mx-3 bg-zinc-100"></span>
+                            <div className="flex flex-row items-center justify-between flex-1 font-semibold text-[21px] text-emerald-500">
+                                <TrendingDown />
+                                {summaryCount[1]}
+                            </div>
                         </div>
                     </div>
-                    <ScrollArea className="flex-1 px-4">
+                    <ScrollArea className="flex-1 mx-4 px-2 py-3 rounded-[8px] bg-zinc-100/50 dark:bg-zinc-700/30">
                         {renderBillData}
                     </ScrollArea>
                     <footer className="flex flex-col px-4 pb-5 my-1 overflow-hidden">

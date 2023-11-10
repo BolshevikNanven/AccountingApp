@@ -4,7 +4,13 @@ import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
 export type Channels = 'windowButton' | 'Bill';
 
-export type BillActions = 'add' | 'edit' | 'delete' | 'getAll' | 'getById';
+type InvokeChannelActionsMap = {
+  Bill: 'add' | 'edit' | 'delete' | 'getAll' | 'getByLedger',
+  Ledger: 'add' | 'edit' | 'delete' | 'getAll',
+}
+
+type InvokeChannels = keyof InvokeChannelActionsMap;
+
 
 const electronHandler = {
   ipcRenderer: {
@@ -24,10 +30,10 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event: IpcRendererEvent, ...args: unknown[]) => func(...args));
     },
   },
-  ipcHandleInvoke: async (channel: Channels, action: BillActions, payload?: any): Promise<any> => {
+  ipcHandleInvoke: async <T extends InvokeChannels>(channel: T, action: InvokeChannelActionsMap[T], payload?: any): Promise<any> => {
     let resp;
     await ipcRenderer.invoke(channel, action, payload).then((res: any) => resp = res)
-    
+
     return resp;
   }
 };
