@@ -8,7 +8,7 @@ import { Button } from "../../components/ui/button";
 import Calendar from "react-calendar"
 import dayjs from "dayjs";
 import { useBilldata } from "../../store/provider/data-provider";
-import { cn } from "../../lib/utils";
+import { cn, computeNumber } from "../../lib/utils";
 
 
 export default function CalendarPage() {
@@ -42,8 +42,8 @@ export default function CalendarPage() {
 
                 data.forEach(bill => {
                     if (bill.count > 0) {
-                        incount += bill.count
-                    } else outcount += bill.count
+                        incount = computeNumber(bill.count, '+', incount)
+                    } else outcount = computeNumber(bill.count, '+', outcount)
                 })
 
                 return (
@@ -66,8 +66,8 @@ export default function CalendarPage() {
 
                 data.forEach(bill => {
                     if (bill.count > 0) {
-                        incount += bill.count
-                    } else outcount += bill.count
+                        incount = computeNumber(bill.count, '+', incount)
+                    } else outcount = computeNumber(bill.count, '+', outcount)
                 })
 
                 return (
