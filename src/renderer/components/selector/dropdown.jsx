@@ -6,25 +6,28 @@ import {
     DropdownMenuItem,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
-    DropdownMenuCheckboxItem
+    DropdownMenuCheckboxItem,
+    DropdownMenuSub,
+    DropdownMenuSubTrigger,
+    DropdownMenuSubContent,
 } from "../ui/dropdown-menu"
 
 import { ChevronDown } from "lucide-react"
 
 
-export default function DropdownSelector({ value, icon, valuesOption, onChangeValue = () => { }, className }) {
+export default function DropdownSelector({ value, icon, valuesOption, label, onChangeValue = () => { }, className }) {
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <button className={cn("flex flex-row items-center p-1 pr-1 px-2 text-sm text-zinc-800 dark:text-zinc-100 rounded outline-none border-none dark:hover:bg-zinc-700 hover:bg-zinc-200/60 transition-all", className)}>
-                    {icon}{value}<ChevronDown className="w-3 h-3 ml-1" />
+                <button className={cn("flex flex-row items-center p-1 pr-1 px-2 text-sm text-zinc-800 dark:text-zinc-100 rounded outline-none border-0 dark:hover:bg-zinc-700 hover:bg-zinc-200/60 transition-all", className)}>
+                    {icon}{(label && label(value)) || value}<ChevronDown className="w-3 h-3 ml-1" />
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                {valuesOption.filter(values => values !== value).map(values =>
-                    <DropdownMenuItem key={values} onClick={() => onChangeValue(values)}>{values}</DropdownMenuItem>
-                )}
+                {valuesOption.map((values, index) => (
+                    <DropdownMenuItem key={index} onClick={() => onChangeValue(values)}>{(label && label(values)) || values}</DropdownMenuItem>
+                ))}
             </DropdownMenuContent>
         </DropdownMenu>
     )

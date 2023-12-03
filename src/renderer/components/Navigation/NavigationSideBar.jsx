@@ -28,6 +28,7 @@ export default function NavigationSideBar() {
             <div className="flex flex-col w-full p-2 gap-2">
                 <Separator className=" bg-gray-300 w-[36px] mx-auto" />
                 <ModeToggle />
+                <NavigationItem icon={<SettingsRegular />} activeIcon={<SettingsFilled />} label={"设置"} routeTo={'/settings'} />
             </div>
         </div>
     )

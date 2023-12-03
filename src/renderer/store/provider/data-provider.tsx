@@ -24,9 +24,6 @@ export default function DataProvider({ children }: { children: any }) {
     const [ledgerdata, dispatchLedgerdata] = useReducer(ledgerDataReducer, [])
 
     useEffect(() => {
-        BillIpc.get().then((res: any) => {
-            dispatchBilldata({ type: 'INIT', payload: res })
-        })
         LedgerIpc.get().then((res: any) => {
             dispatchLedgerdata({ type: 'INIT', payload: res })
         })

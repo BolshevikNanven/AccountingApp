@@ -2,11 +2,13 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'windowButton' | 'Bill';
+export type Channels = 'windowButton' | 'openExplorer' | 'openExternal'
 
 type InvokeChannelActionsMap = {
   Bill: 'add' | 'edit' | 'delete' | 'getAll' | 'getByLedger',
   Ledger: 'add' | 'edit' | 'delete' | 'getAll',
+  User: 'get' | 'set',
+  Data: 'export' | 'getDatabaseFile',
 }
 
 type InvokeChannels = keyof InvokeChannelActionsMap;
@@ -31,10 +33,10 @@ const electronHandler = {
     },
   },
   ipcHandleInvoke: async <T extends InvokeChannels>(channel: T, action: InvokeChannelActionsMap[T], payload?: any): Promise<any> => {
-    let resp;
-    await ipcRenderer.invoke(channel, action, payload).then((res: any) => resp = res)
+    return new Promise((resolve) => {
+      ipcRenderer.invoke(channel, action, payload).then((res: any) => resolve(res))
 
-    return resp;
+    });
   }
 };
 

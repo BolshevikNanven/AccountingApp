@@ -1,10 +1,17 @@
 import Database from 'better-sqlite3'
+import fs from 'fs'
+import path from 'path'
+
 import dayjs from 'dayjs';
 
 export class SqlDatabase {
     #db;
     constructor(url) {
-        this.#db = new Database(url, { verbose: console.log });
+        if (!fs.existsSync(url)) {
+            fs.mkdirSync(url)
+        }
+
+        this.#db = new Database(path.join(url, 'data.db'), { verbose: console.log });
 
         const db_version = this.#db.pragma('user_version', { simple: true });
         if (db_version === 0) {
@@ -41,7 +48,7 @@ export class SqlDatabase {
               PRIMARY KEY ("id")
             );
 
-            INSERT INTO "ledger" VALUES ('1', '${nowDate}', '${nowDate}', '默认账本', '#fecaca', NULL);
+            INSERT INTO "ledger" VALUES ('1', '${nowDate}', '${nowDate}', '默认账本', '#fecaca', '');
             
             PRAGMA foreign_keys = true;
             `);

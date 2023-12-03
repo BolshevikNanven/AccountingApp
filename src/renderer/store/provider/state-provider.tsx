@@ -1,10 +1,11 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
 import { useBilldata, useLedgerdata } from "./data-provider";
-import { BillIpc } from "../ipc";
+import { BillIpc, UserIpc } from "../ipc";
 
-type StateType = {
+export type StateType = {
     selectedLedger?: string,
-
+    theme?: string,
+    chartRange?: string,
 }
 
 const stateContext = createContext<[StateType, (newState: StateType) => void] | [any, any]>([null, null])
@@ -21,11 +22,13 @@ export function StateProvider({ children }: any) {
     const [billdata, dispatchBilldata] = useBilldata()
 
     useEffect(() => {
-        if (ledgerData.length > 0) {
-            dispatchGlobalState({ selectedLedger: ledgerData[0].id })
+        const match = (ledgerData.filter(ledger => ledger.id === globalState.selectedLedger).length) !== 0
+
+        if (!match && Object.keys(globalState).length > 0) {
+            dispatchGlobalState({ ...globalState, selectedLedger: ledgerData[0].id })
         }
 
-    }, [ledgerData.length])
+    }, [ledgerData?.length])
 
     useEffect(() => {
         if (globalState.selectedLedger) {
@@ -36,9 +39,23 @@ export function StateProvider({ children }: any) {
 
     }, [globalState.selectedLedger])
 
+    useEffect(() => {
+        if (Object.keys(globalState).length > 0) {
+            UserIpc.set(globalState)
+        }
+    }, [globalState])
+
+    useEffect(() => {
+        UserIpc.get().then((res) => {
+            dispatchGlobalState({ ...res })
+        })
+
+    }, [])
+
+
     return (
         <stateContext.Provider value={[globalState, dispatchGlobalState]}>
-            {children}
+            {(Object.keys(globalState).length !== 0) && children}
         </stateContext.Provider>
     )
 }

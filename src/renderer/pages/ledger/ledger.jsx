@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import MainHeader from "../../components/mainHeader/MainHeader";
 import { Button } from "../../components/ui/button";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useBilldata, useLedgerdata } from "../../store/provider/data-provider";
 import { useGlobalState } from "../../store/provider/state-provider";
@@ -87,7 +87,7 @@ export default function LedgerPage() {
             <MainHeader title="账本">
                 <Button onClick={addLedger} variant='outline' className="px-2 pr-3 h-8 mr-2" ><Plus className="w-5 h-5 text-zinc-600 mr-1 " />新建账本</Button>
             </MainHeader>
-            <div className="flex flex-row flex-1 py-3 gap-4 ">
+            <div className="flex flex-row flex-1 py-3 gap-4 flex-wrap">
                 {renderLedgerCard()}
             </div>
         </div>

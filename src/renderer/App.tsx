@@ -7,6 +7,7 @@ import HomePage from './pages/home/home';
 import DetailsPage from './pages/details/details';
 import CalendarPage from './pages/calendar/calendar';
 import LedgerPage from './pages/ledger/ledger';
+import SettingPage from './pages/setting/setting';
 
 import DataProvider from './store/provider/data-provider';
 import ThemeProvider from './components/theme/theme';
@@ -33,6 +34,7 @@ export default function App() {
                   <Route path='/details' element={<DetailsPage />} />
                   <Route path='/calendar' element={<CalendarPage />} />
                   <Route path='/books' element={<LedgerPage />} />
+                  <Route path='/settings/*' element={<SettingPage />} />
                 </Routes>
               </main>
               <Toaster />

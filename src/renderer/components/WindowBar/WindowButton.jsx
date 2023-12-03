@@ -10,10 +10,10 @@ export default function WindowButton() {
     return (
         <div className=" fixed top-0 right-0 flex flex-row h-9 w-screen transition-colors z-50 ">
             <WindowDragArea className=" flex-1 bg-zinc50 ml-[68px]"/>
-            <button onClick={() => handleClick("mini")} className="nodrag w-12 bg-zinc50 hover:bg-zinc-300 active:bg-zinc-400 flex flex-row items-center justify-center cursor-default">
+            <button onClick={() => handleClick("mini")} className="nodrag w-12 bg-zinc50 hover:bg-zinc-300 dark:hover:bg-zinc-600 active:bg-zinc-400 flex flex-row items-center justify-center cursor-default">
                 <Minus className="w-[14px] h-[14px]" />
             </button>
-            <button onClick={() => handleClick("scale")} className="nodrag w-12 bg-zinc50 hover:bg-zinc-300 active:bg-zinc-400 flex flex-row items-center justify-center cursor-default">
+            <button onClick={() => handleClick("scale")} className="nodrag w-12 bg-zinc50 hover:bg-zinc-300 dark:hover:bg-zinc-600 active:bg-zinc-400 flex flex-row items-center justify-center cursor-default">
                 <Maximize className="w-[13px] h-[13px]" />
             </button>
             <button onClick={() => handleClick("close")} className="nodrag w-12 bg-zinc50 hover:bg-red-600 hover:text-white active:bg-red-700 flex flex-row items-center justify-center cursor-default">

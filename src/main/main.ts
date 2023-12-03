@@ -17,15 +17,19 @@ import { resolveHtmlPath } from './util';
 import webpackPaths from '../../.erb/configs/webpack.paths'
 
 import { SqlDatabase } from './db/db'
-import { BillDbServe,LedgerDbServe } from './db/serve';
+import { BillDbServe, LedgerDbServe, UserFileServe, DataFileServe } from './db/serve';
 
 class AppUpdater {
-  
+  constructor() {
+    autoUpdater.forceDevUpdateConfig = true
+    autoUpdater.autoDownload = false
+    autoUpdater.checkForUpdates().then((res) => console.log(res)).catch(err => console.log(err))
+  }
 }
 
 let mainWindow = null;
-
-
+const isDebug = process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+const DATA_BASE_PATH = isDebug ? path.join(webpackPaths.appPath, 'sql') : path.join(app.getPath('userData'), 'data')
 
 ipcMain.on('windowButton', async (event, arg) => {
   switch (arg) {
@@ -49,13 +53,22 @@ ipcMain.on('windowButton', async (event, arg) => {
 
 });
 
+ipcMain.on('openExplorer', async (_event, pathname) => {
+  if (pathname === 'database') {
+    shell.openPath(DATA_BASE_PATH)
+  }
+  else shell.openPath(pathname)
+})
+ipcMain.on('openExternal', async (_event, url) => {
+  shell.openExternal(url)
+})
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
 
-const isDebug =
-  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+
 
 
 if (isDebug) {
@@ -111,7 +124,7 @@ const createWindow = async () => {
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 };
 
 /**
@@ -136,7 +149,7 @@ app
       if (mainWindow === null) createWindow();
     });
 
-    const db = new SqlDatabase(isDebug ? path.join(webpackPaths.appPath, 'sql', 'data.db') : path.join(app.getPath('userData'), 'data.db'));
+    const db = new SqlDatabase(DATA_BASE_PATH);
 
     ipcMain.handle('Bill', async (_event, action, payload) => {
       const dbServe = new BillDbServe(db);
@@ -158,6 +171,20 @@ app
         case 'add': return dbServe.add(payload);
         case 'edit': return dbServe.edit(payload);
         case 'delete': return dbServe.delete(payload);
+      }
+    })
+
+    ipcMain.handle('User', async (_event, action, payload) => {
+      switch (action) {
+        case 'get': return UserFileServe.get()
+        case 'set': return UserFileServe.set(payload)
+      }
+    })
+
+    ipcMain.handle('Data', async (_event, action, payload) => {
+      switch (action) {
+        case 'export': return DataFileServe.exportData(payload.data, payload.pattern, payload.name)
+        case 'getDatabaseFile': return DataFileServe.getDatabase(path.join(DATA_BASE_PATH, 'data.db'))
       }
     })
 

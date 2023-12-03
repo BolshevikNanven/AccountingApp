@@ -1,4 +1,5 @@
 import { useEffect, useState, createContext, useContext } from "react"
+import { useGlobalState } from "../../store/provider/state-provider";
 
 const ThemeContext = createContext()
 
@@ -8,9 +9,9 @@ export function useTheme() {
 
 
 export default function ThemeProvider({ children }) {
-    const [theme, setTheme] = useState('light')
+    const [globalState, dispatchGlobalStateData] = useGlobalState()
 
-    const rawSetTheme = theme => {
+    const rawSetTheme = (theme) => {
         const root = window.document.documentElement
         const isDark = theme === "dark"
 
@@ -20,18 +21,18 @@ export default function ThemeProvider({ children }) {
     }
 
     const toggleTheme = () => {
-        if (theme === 'dark') {
-            setTheme('light')
-        }else setTheme('dark')
+        if (globalState.theme === 'dark') {
+            dispatchGlobalStateData({ theme: 'light' })
+        } else dispatchGlobalStateData({ theme: 'dark' })
     }
 
 
     useEffect(() => {
-        rawSetTheme(theme)
-    }, [theme])
+        rawSetTheme(globalState.theme || 'light')
+    }, [globalState.theme])
 
     return (
-        <ThemeContext.Provider value={[theme, toggleTheme]}>
+        <ThemeContext.Provider value={[globalState.theme, toggleTheme]}>
             {children}
         </ThemeContext.Provider>
     )

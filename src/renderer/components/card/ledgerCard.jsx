@@ -78,7 +78,7 @@ export default function LedgerCard(
                     <ColorPicker onSelect={handleSelectColor}>
                         <Palette onClick={handleClickColor} className="w-[18px] h-[18px] cursor-pointer" />
                     </ColorPicker>
-                    <DeleteDialog onDelete={() => handleDelete(ledger.id)} title={`确认删除 ${ledger.name} 吗`} description={"此操作不可撤销，将会销毁账本的所有数据"}>
+                    <DeleteDialog onDelete={() => handleDelete(ledger.id)} title={`确认删除 ${ledger.name} 吗？`} description={"此操作不可撤销，将会销毁账本的所有数据"}>
                         <Trash2 onClick={(e) => e.stopPropagation()} className="w-[18px] h-[18px] cursor-pointer" />
                     </DeleteDialog>
 

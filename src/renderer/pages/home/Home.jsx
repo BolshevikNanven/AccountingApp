@@ -12,6 +12,7 @@ import { useBilldata } from "../../store/provider/data-provider";
 import dayjs from "dayjs";
 import { computeNumber, resortToGroupByDatetime } from "../../lib/utils";
 import LedgerSelector from "../../components/selector/ledger";
+import { DateRangeSelector } from "../../components/charts/dateRangeSelector";
 
 
 export default function HomePage() {
@@ -75,8 +76,9 @@ export default function HomePage() {
     return (
         <>
             <div className="flex-1 flex flex-col h-full overflow-x-hidden pl-2">
-                <MainHeader title="主页" className=" px-4" />
-
+                <MainHeader title="主页" className=" px-4" >
+                    <DateRangeSelector />
+                </MainHeader>
                 <div className="relative w-full flex-1 pt-2 mt-2">
                     <Chart
                         title={'分类'}

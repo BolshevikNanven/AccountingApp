@@ -76,6 +76,7 @@ export default function DetailsPage() {
         const sortedBill = resortToGroupByDatetime(billdata);
         let dom = [];
 
+
         sortedBill.forEach((value, key) => {
             let billsymbol = false
 
@@ -145,7 +146,7 @@ export default function DetailsPage() {
                     {renderBillData}
                 </ScrollArea>
             </div>
-            <div className={cn("h-full w-[356px] p-3 pb-4 pt-[48px] overflow-hidden transition-all", !sidebarOpen && "w-0 px-0")}>
+            <div className={cn("h-full w-[356px] p-3 pb-4 pt-[48px] overflow-hidden", !sidebarOpen && "hidden")}>
                 <div className="dark:bg-zinc-800 min-w-[332px] w-[332px] h-full shadow-xl rounded-lg flex flex-col overflow-hidden">
                     <header className=" bg-[rgb(241,243,244)] dark:bg-zinc-700 dark:border-zinc-800 h-[36px] border-t rounded-t-lg border-white flex flex-row items-center justify-between px-4">
                         <button onClick={handleNewBill} className="outling-none bg-transparent h-[28px] w-[28px] rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-600"><ListPlus className="w-5 h-5 mx-auto text-zinc-500 dark:text-zinc-300" /></button>
